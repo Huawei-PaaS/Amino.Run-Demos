@@ -17,6 +17,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="sapphire.appexamples.minnietwitter.glue.UserTimelineActivity"
+            android:label="@string/activity_display_tweet"
+            android:parentActivityName="sapphire.appexamples.minnietwitter.glue.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sapphire.appexamples.minnietwitter.glue.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

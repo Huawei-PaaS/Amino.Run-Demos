@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="15dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bg_card"
+        android:divider="@null"
+        android:showDividers="none">
+
+        <ImageView
+
+            android:id="@+id/imageView"
+            android:contentDescription="@string/hello_world"
+            android:background="@drawable/ic_launcher"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignBottom="@+id/listTweetView"
+            android:scaleType="center" />
+
+        <TextView
+            android:id="@+id/listTweetView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:paddingLeft="10dp"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@+id/imageView" />
+
+    </LinearLayout>
+
+</FrameLayout>

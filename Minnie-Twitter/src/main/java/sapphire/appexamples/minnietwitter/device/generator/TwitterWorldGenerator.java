@@ -18,10 +18,9 @@ import sapphire.common.SapphireObjectID;
 import sapphire.kernel.server.KernelServer;
 import sapphire.kernel.server.KernelServerImpl;
 import sapphire.oms.OMSServer;
-import sapphire.runtime.EventHandler;
 
 public class TwitterWorldGenerator {
-	static final int EVENTS_PER_USER = 100;
+	static final int EVENTS_PER_USER = 15;
 	static final int USERS_NUM = 1;
 	static final int TAG_NUM = 5;
 
@@ -77,7 +76,7 @@ public class TwitterWorldGenerator {
 	 * (Sungwook Moon, 12/5/2017) This is a temporary method for demo to show shift policy.
 	 * This method adds a single user and send tweet messages for predefined times.
 	 */
-	private static void ExecuteSingleUserDemo(String[] args) {
+	private static void ExecuteSingleUserDemo(String[] args, String message) {
 		Registry registry;
 
 		try {
@@ -124,11 +123,11 @@ public class TwitterWorldGenerator {
 				String tweet = getTweet(cnt);
 
 				try {
-					t.tweet(tweet);
+					t.tweet(message);
 				} catch(Exception e) {
 					System.out.print(", Failed ");
 				}
-				System.out.println("\n@user" + Integer.toString(userId) + " tweeted: " + tweet);
+				System.out.println("\n@user" + Integer.toString(userId) + " tweeted: " + message);
 			}
 
 			System.out.println("Done populating!");
@@ -217,7 +216,7 @@ public class TwitterWorldGenerator {
 			e.printStackTrace();
 		}
 	}
-	public static void main(String[] args) {
-		ExecuteSingleUserDemo(args);
+	public static void main(String[] args, String message) {
+		ExecuteSingleUserDemo(args, message);
 	}
 }

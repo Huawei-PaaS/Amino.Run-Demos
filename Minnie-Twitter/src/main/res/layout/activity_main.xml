@@ -1,16 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
+    android:paddingBottom="15dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="15dp"
+    tools:context="sapphire.appexamples.minnietwitter.glue.MainActivity">
 
-    <TextView
+    <EditText
+        android:id="@+id/tweetBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="your tweet here" />
+
+    <Button
+        android:id="@+id/btnTweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tweetBody"
+        android:layout_marginTop="19dp"
+        android:background="@android:color/holo_blue_light"
+        android:text="Tweet"
+        android:onClick="sendMessage" />
+
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tweetBody"
+        android:layout_marginTop="19dp"
+        android:background="@android:color/darker_gray"
+        android:text="Clear"
+        android:onClick="clear" />
 
 </RelativeLayout>
