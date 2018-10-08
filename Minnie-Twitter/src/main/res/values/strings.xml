@@ -2,9 +2,14 @@
 <resources>
 
     <string name="app_name">MinnieTwitter</string>
+    <string name="login">MinnieTwitter Login</string>
+    <string name="register">Register New Account</string>
+    <string name="all_tweets">Tweet History</string>
     <string name="hello_world">MinnieTwitter Home</string>
     <string name="activity_display_tweet">My Tweet</string>
     <string name="action_settings">Settings</string>
-    <color name="Twitter_blue">#c0deed</color>
+    <string name="logout">Logout</string>
+    <string name="new_user">New to MinnieTwitter? Register here</string>
+    <string name="existing_user">"Already have an account? Login here"</string>
 
 </resources>

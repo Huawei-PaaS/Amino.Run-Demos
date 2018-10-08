@@ -89,4 +89,8 @@ public class Timeline implements SapphireObject<ShiftPolicy> {
 		int pos = tweets.size() - 1 - tweetId;
 		return tweets.get(pos);
 	}
+
+	public List getTweetsList() {
+		return tweets;
+	}
 }

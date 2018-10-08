@@ -7,7 +7,7 @@
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
     android:paddingTop="15dp"
-    tools:context="sapphire.appexamples.minnietwitter.glue.MainActivity">
+    tools:context="sapphire.appexamples.minnietwitter.glue.HomeActivity">
 
     <EditText
         android:id="@+id/tweetBody"
@@ -40,5 +40,33 @@
         android:background="@android:color/darker_gray"
         android:text="Clear"
         android:onClick="clear" />
+
+    <RelativeLayout
+        android:id="@+id/InnerRelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btnShow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:background="@android:color/darker_gray"
+            android:text="View All Tweets"
+            android:layout_alignParentBottom="true" />
+
+        <TextView
+            android:id="@+id/currentTweet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="176dp"
+            android:text=""
+            android:textSize="20dp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
