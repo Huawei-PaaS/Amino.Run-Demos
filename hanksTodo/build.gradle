@@ -58,6 +58,7 @@ repositories {
 dependencies {
     compile 'com.android.support:support-v4:27.0.2'
     compile 'com.huawei.paas:sapphire-core:1.0.0'
+    compile 'org.yaml:snakeyaml:1.23'
 }
 
 subprojects {
@@ -71,6 +72,9 @@ subprojects {
 
     dependencies {
         compile 'com.huawei.paas:sapphire-core:1.0.0'
+        compile 'org.yaml:snakeyaml:1.23'
+        compile 'org.graalvm:graal-sdk:1.0.0-rc7'
+
     }
 
     task copyClasses(type: Copy) {
@@ -100,20 +104,20 @@ subprojects {
     compileHanksTodoStubs.dependsOn genHanksTodoStubs
     jar.dependsOn compileHanksTodoStubs
 
-    task runOms(type: JavaExec) {
+    task runoms(type: JavaExec) {
         //dependsOn fatJar
         classpath = sourceSets.main.runtimeClasspath
         main = 'sapphire.oms.OMSServerImpl'
         args project.property('omsIp'), project.property('omsPort')
     }
 
-    task runKernelServer(type: JavaExec) {
+    task runks(type: JavaExec) {
         classpath = sourceSets.main.runtimeClasspath
         main = 'sapphire.kernel.server.KernelServerImpl'
         args project.property('kernelServerIp'), project.property('kernelServerPort'), project.property('omsIp'), project.property('omsPort')
     }
 
-    task runApp(type: JavaExec) {
+    task runapp(type: JavaExec) {
         classpath = sourceSets.main.runtimeClasspath
         main = 'sapphire.appexamples.minnietwitter.device.generator.TwitterWorldGenerator'
         args project.property('omsIp'), project.property('omsPort'), project.property('kernelIpAndroid'), project.property('kernelServerPort')

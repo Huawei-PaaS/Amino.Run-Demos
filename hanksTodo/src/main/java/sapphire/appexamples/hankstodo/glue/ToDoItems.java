@@ -70,12 +70,6 @@ public class ToDoItems extends Activity {
             }
             return response;
         }
-        @Override
-        protected void onPostExecute(String response) {
-            if(response == null) {
-
-            }
-        }
     }
 
     private class CreateToDoList extends AsyncTask<String, Void, String>{

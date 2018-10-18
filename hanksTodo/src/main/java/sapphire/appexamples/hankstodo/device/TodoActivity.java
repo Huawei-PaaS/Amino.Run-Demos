@@ -4,12 +4,17 @@ import java.net.InetSocketAddress;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import sapphire.app.DMSpec;
+import sapphire.app.Language;
+import sapphire.app.SapphireObjectSpec;
 import sapphire.appexamples.hankstodo.app.TodoList;
 import sapphire.appexamples.hankstodo.app.TodoListManager;
 import sapphire.common.SapphireObjectID;
 import sapphire.kernel.server.KernelServer;
 import sapphire.kernel.server.KernelServerImpl;
 import sapphire.oms.OMSServer;
+import sapphire.policy.dht.DHTPolicy;
+
 
 public class TodoActivity {
 	public static TodoList tl;
@@ -23,7 +28,16 @@ public class TodoActivity {
 
 			KernelServer nodeServer = new KernelServerImpl(new InetSocketAddress(args[2], Integer.parseInt(args[3])), new InetSocketAddress(args[0], Integer.parseInt(args[1])));
 
-			SapphireObjectID sapphireObjId = server.createSapphireObject("sapphire.appexamples.hankstodo.app.TodoListManager");
+			SapphireObjectSpec spec = SapphireObjectSpec.newBuilder()
+					.setLang(Language.java)
+					.setJavaClassName("sapphire.appexamples.hankstodo.app.TodoListManager").addDMSpec(
+					DMSpec.newBuilder()
+							.setName(DHTPolicy.class.getName())
+							.create())
+					.create();
+
+
+			SapphireObjectID sapphireObjId = server.createSapphireObject(spec.toString());
 			tlm = (TodoListManager)server.acquireSapphireObjectStub(sapphireObjId);
 			System.out.println("Received tlm: " + tlm);
 		} catch (Exception e) {
