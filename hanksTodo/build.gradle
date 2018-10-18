@@ -99,4 +99,23 @@ subprojects {
     genHanksTodoStubs.dependsOn copyClasses
     compileHanksTodoStubs.dependsOn genHanksTodoStubs
     jar.dependsOn compileHanksTodoStubs
+
+    task runOms(type: JavaExec) {
+        //dependsOn fatJar
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'sapphire.oms.OMSServerImpl'
+        args project.property('omsIp'), project.property('omsPort')
+    }
+
+    task runKernelServer(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'sapphire.kernel.server.KernelServerImpl'
+        args project.property('kernelServerIp'), project.property('kernelServerPort'), project.property('omsIp'), project.property('omsPort')
+    }
+
+    task runApp(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'sapphire.appexamples.minnietwitter.device.generator.TwitterWorldGenerator'
+        args project.property('omsIp'), project.property('omsPort'), project.property('kernelIpAndroid'), project.property('kernelServerPort')
+    }
 }

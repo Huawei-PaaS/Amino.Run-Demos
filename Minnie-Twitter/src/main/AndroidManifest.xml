@@ -10,12 +10,28 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="sapphire.appexamples.minnietwitter.glue.MainActivity"
-            android:label="@string/app_name" >
+            android:name="sapphire.appexamples.minnietwitter.glue.LoginActivity"
+            android:label="@string/login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="sapphire.appexamples.minnietwitter.glue.RegisterActivity"
+            android:label="@string/register" >
+        </activity>
+        <activity
+            android:name="sapphire.appexamples.minnietwitter.glue.HomeActivity">
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name="sapphire.appexamples.minnietwitter.glue.MyTweets"
+            android:label="@string/all_tweets"
+            android:parentActivityName="sapphire.appexamples.minnietwitter.glue.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sapphire.appexamples.minnietwitter.glue.HomeActivity" />
         </activity>
     </application>
 

@@ -1,0 +1,61 @@
+apply plugin: 'java-library'
+
+repositories {
+    jcenter()
+    google()
+    maven { url  "https://dl.bintray.com/terryzhuo/DCAP" }
+}
+
+dependencies {
+    implementation 'com.huawei.paas:sapphire-core:1.0.0'
+    implementation 'com.huawei.paas:java.rmi:1.0.0'
+    implementation 'com.huawei.paas:apache.harmony:1.0.0'
+}
+
+
+// Task for Stub compilation
+task compileRecogStub(type: JavaCompile) {
+    source = sourceSets.main.java.srcDirs
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = sourceSets.main.output.classesDir
+    options.incremental = true
+}
+
+// Task for Stub generation
+task genRecogStub(type: JavaExec) {
+    main = "sapphire.compiler.StubGenerator"
+    classpath = sourceSets.main.runtimeClasspath
+    def pkgName = 'facerecog'
+    def src = "$projectDir/build/classes/java/main/facerecog/"
+    def dst = "$projectDir/src/main/java/facerecog/stubs/"
+    args src, pkgName, dst
+}
+
+genRecogStub.mustRunAfter compileJava
+compileRecogStub.dependsOn genRecogStub
+jar.dependsOn compileRecogStub
+
+// Task for running the OMS
+task runoms(type: JavaExec) {
+    dependsOn jar
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'sapphire.oms.OMSServerImpl'
+    args project.property('omsIp'), project.property('omsPort')
+}
+
+// Task for running the Kernel Server
+task runks(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'sapphire.kernel.server.KernelServerImpl'
+    args project.property('kernelServerIp'), project.property('kernelServerPort'), project.property('omsIp'), project.property('omsPort')
+}
+
+
+// Task for running Face Recognition demo app
+task runapp(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "application.DemoAppStart"
+    args project.property('omsIp'), project.property('omsPort'), project.property('kernelIpAndroid'),
+            project.property('kernelServerPort'), project.property('inferenceType'), project.property('sourceType'),
+            project.property('targetType')
+}

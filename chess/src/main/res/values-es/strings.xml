@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hola a todos, MainActivity!</string>
+    <string name="app_name">Ajedrez de bolsillo para Android</string>
+    <string name="please_choose_white">Por favor, elija piezas blancas</string>
+    <string name="please_choose_black">Por favor, elija pedazo negro</string>
+    <string name="illegal_move_try_again">Movimiento ilegal, inténtalo de nuevo</string>
+    <string name="main_menu_startGame">Inicio del juego</string>
+    <string name="main_menu_help">Ayuda</string>
+    <string name="main_menu_about">Sobre</string>
+    <string name="main_menu_options">opciones</string>
+    <string name="main_menu_exit">Salida</string>
+    <string name="main_menu_copyright">Aviso de copyright</string>
+    <string name="dialog_alert">alerta</string>
+    <string name="dialog_message">Bolsillo de ajedrez\npor Kobi Krasnoff</string>
+    <string name="dialog_ok_button">Aceptar</string>
+    <string name="activity_instructions">Sólo tiene que arrastrar las piezas blancas en su turno y jugar contra tu teléfono Android</string>
+    <string name="activity_return">Volver a la pantalla principal</string>
+    <string name="activity_gpl">completa licencia GNU</string>
+    <string name="activity_back">volver</string>
+    <string name="options_return">Volver a la pantalla principal</string>
+    <string name="options_prompt">Elija el nivel</string>
+    <string-array name="options_level">
+        <item>Nivel 1</item>
+        <item>Nivel 2</item>
+        <item>Nivel 3</item>
+        <item>Nivel 4</item>
+        <item>Nivel 5</item>
+        <item>Nivel 6</item>
+        <item>Nivel 7</item>
+        <item>Nivel 8</item>
+    </string-array>
+    <string name="options_color_white">Blanco</string>
+    <string name="options_color_black">negro</string>
+    <string name="options_ok">Aceptar</string>
+    <string name="options_cancel">Cancelar</string>
+    <string name="confirmation_save_title">confirmación</string>
+    <string name="confirmation_save_content">Quieres salvar a este juego?</string>
+    <string name="confirmation_save_ok">Sí</string>
+    <string name="confirmation_save_cancel">No</string>
+    <string name="confirmation_save_cancel2">Cancelar</string>
+    <string name="confirmation_open_title">Confirmación</string>
+    <string name="confirmation_open_content">Usted tiene una partida guardada en su memoria.\nDesea continuar con el juego salvado?</string>
+    <string name="confirmation_open_ok">Sí</string>
+    <string name="confirmation_open_cancel">No</string>
+    <string name="showPromotionPieceDialog_title">Elegir una pieza</string>
+    <string name="showPromotionPieceDialog_queen">Reina</string>
+    <string name="showPromotionPieceDialog_rook">Torre</string>
+    <string name="showPromotionPieceDialog_bishop">Obispo</string>
+    <string name="showPromotionPieceDialog_knight">Caballero</string>
+    <string name="activity_myMove">Mi movimiento</string>
+    <string name="activity_yourMove">Your Move</string>
+    <string name="activity_thinking">Pensamiento...</string>
+    <string name="activity_check">Ajedrez!</string>
+    <string name="activity_mate">mate!!</string>
+    <string name="activity_draw">dibujar!!</string>
+    <string name="activity_copyright">Bolsillo derecho de autor de Ajedrez (C) 2011 por Kobi Krasnoff\n\nEste programa viene con ABSOLUTAMENTE NINGUNA GARANTÍA; Este software es libre, y usted está invitado a redistribuirlo bajo ciertas condiciones; Haga clic en la "Licencia GNU completo" para obtener más detalles.\n\nCréditos:\nEste programa hace uso de las "Herramientas para la formación de Ajedrez": Copyright 2009 by Dietrich Kappe.\nEste programa hace uso de la biblioteca Chesspresso ™: Copyright 2002 por Bernhard Seybold.\nAjedrez diseño gráfico piezas realizadas por Colin M.L. Burnett: Copyright © 2011 por Colin M.L. Burnett\n\nMi correo es: krasnoff.kobi@gmail.com\nSitio del proyecto: http://code.google.com/p/pocket-chess-for-android/\nEl código fuente se puede encontrar en el sitio del proyecto.</string>
+</resources>

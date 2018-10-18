@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="15dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="15dp"
+    tools:context="sapphire.appexamples.minnietwitter.glue.HomeActivity">
+
+    <EditText
+        android:id="@+id/tweetBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="your tweet here" />
+
+    <Button
+        android:id="@+id/btnTweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tweetBody"
+        android:layout_marginTop="19dp"
+        android:background="@android:color/holo_blue_light"
+        android:text="Tweet"
+        android:onClick="sendMessage" />
+
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tweetBody"
+        android:layout_marginTop="19dp"
+        android:background="@android:color/darker_gray"
+        android:text="Clear"
+        android:onClick="clear" />
+
+    <RelativeLayout
+        android:id="@+id/InnerRelativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btnShow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:background="@android:color/darker_gray"
+            android:text="View All Tweets"
+            android:layout_alignParentBottom="true" />
+
+        <TextView
+            android:id="@+id/currentTweet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="176dp"
+            android:text=""
+            android:textSize="20dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

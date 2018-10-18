@@ -1,4 +1,4 @@
-# MinnieTwitter demo application
+# Hankstodo demo application
 
 Follow the following steps to build and run hanksTodo demo app.
 

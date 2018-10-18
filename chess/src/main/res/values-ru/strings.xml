@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Привет мир, MainActivity!</string>
+    <string name="app_name">Карманные шахматы для Android</string>
+    <string name="please_choose_white">Пожалуйста, выберите белый лист</string>
+    <string name="please_choose_black">Пожалуйста, выберите черный кусок</string>
+    <string name="illegal_move_try_again">Незаконное перемещение, попробуйте еще раз</string>
+    <string name="main_menu_startGame">Начать игру</string>
+    <string name="main_menu_help">помощь</string>
+    <string name="main_menu_about">о</string>
+    <string name="main_menu_options">опции</string>
+    <string name="main_menu_exit">выход</string>
+    <string name="main_menu_copyright">уведомление об авторских правах</string>
+    <string name="dialog_alert">тревога</string>
+    <string name="dialog_message">Карманные шахматы\nПо Коби Краснов</string>
+    <string name="dialog_ok_button">Ok</string>
+    <string name="activity_instructions">Просто перетащите белыми фигурами в свою очередь, и играть против телефона Android</string>
+    <string name="activity_return">Вернуться в главное меню</string>
+    <string name="activity_gpl">полную лицензию GNU</string>
+    <string name="activity_back">возвращаться</string>
+    <string name="options_return">Вернуться в главное меню</string>
+    <string name="options_prompt">Выберите уровень</string>
+    <string-array name="options_level">
+        <item>Уровень 1</item>
+        <item>Уровень 2</item>
+        <item>Уровень 3</item>
+        <item>Уровень 4</item>
+        <item>Уровень 5</item>
+        <item>Уровень 6</item>
+        <item>Уровень 7</item>
+        <item>Уровень 8</item>
+    </string-array>
+    <string name="options_color_white">белый</string>
+    <string name="options_color_black">черный</string>
+    <string name="options_ok">OK</string>
+    <string name="options_cancel">отменить</string>
+    <string name="confirmation_save_title">подтверждение</string>
+    <string name="confirmation_save_content">Вы хотите, чтобы сохранить эту игру?</string>
+    <string name="confirmation_save_ok">да</string>
+    <string name="confirmation_save_cancel">нет</string>
+    <string name="confirmation_save_cancel2">отменить</string>
+    <string name="confirmation_open_title">подтверждение</string>
+    <string name="confirmation_open_content">Вы сохраненной игры в вашей памяти.\nВы хотите, чтобы продолжить сохраненную игру?</string>
+    <string name="confirmation_open_ok">да</string>
+    <string name="confirmation_open_cancel">нет</string>
+    <string name="showPromotionPieceDialog_title">Выберите кусок</string>
+    <string name="showPromotionPieceDialog_queen">королева</string>
+    <string name="showPromotionPieceDialog_rook">ладья</string>
+    <string name="showPromotionPieceDialog_bishop">епископ</string>
+    <string name="showPromotionPieceDialog_knight">рыцарь</string>
+    <string name="activity_myMove">Мой Перемещение</string>
+    <string name="activity_yourMove">Твой шаг</string>
+    <string name="activity_thinking">мышление...</string>
+    <string name="activity_check">чек!</string>
+    <string name="activity_mate">мате!!</string>
+    <string name="activity_draw">рисовать!!</string>
+     <string name="activity_copyright">Pocket Chess Copyright (C) 2011 by Kobi Krasnoff\n\nThis program comes with ABSOLUTELY NO WARRANTY; This is free software, and you are welcome to redistribute it under certain conditions; Click the "Full GNU License" button for more details.\n\nCredits:\nThis program makes use of the "Chess Training Tools": Copyright  2009 by Dietrich Kappe.\nThis program makes use of the Chesspresso™ library: Copyright  2002 by Bernhard Seybold.\nChess pieces graphic design made by Colin M.L. Burnett: Copyright © 2011 by Colin M.L. Burnett\n\nMy email is: krasnoff.kobi@gmail.com\nProject site: http://code.google.com/p/pocket-chess-for-android/\nSource code can be found in the project site.</string>
+</resources>

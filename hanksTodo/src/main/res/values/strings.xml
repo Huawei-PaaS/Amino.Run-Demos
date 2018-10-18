@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">HanksTodo</string>
+    <string name="todo_list">HanksTodo List</string>
     <string name="action_settings">Settings</string>
     <string name="edit_message">Enter a message</string>
     <string name="button_send">Send</string>

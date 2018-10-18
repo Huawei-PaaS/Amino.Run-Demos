@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    
+		<TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="@string/options_prompt"
+    	/>
+		<Spinner 
+        android:id="@+id/spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:prompt="@string/options_prompt"
+    	/>
+    
+    	<RadioGroup
+	      android:layout_width="fill_parent"
+	      android:layout_height="wrap_content"
+	      android:orientation="vertical"
+	      android:layout_below="@+id/spinner"
+	      android:id="@+id/radio_group_color">
+	      
+	      <RadioButton android:id="@+id/radio_white"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:text="@string/options_color_white" />
+	      <RadioButton android:id="@+id/radio_black"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:text="@string/options_color_black" />
+	    </RadioGroup>
+    
+    	<Button
+	        android:id="@+id/ok"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/radio_group_color"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginLeft="10dip"
+	        android:text="@string/options_ok" />
+	    <Button
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_toLeftOf="@id/ok"
+	        android:layout_alignTop="@id/ok"
+	        android:text="@string/options_cancel"
+	        android:id="@+id/cencel" />
+    	
+	
+</RelativeLayout >

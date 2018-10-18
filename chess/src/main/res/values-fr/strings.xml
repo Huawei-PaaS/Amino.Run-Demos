@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Bonjour tout le monde, MainActivity!</string>
+    <string name="app_name">Echecs Pocket Pour Android</string>
+    <string name="please_choose_white">S\'il vous plaît choisissez pièce blanche</string>
+    <string name="please_choose_black">S\'il vous plaît choisissez pièce noire</string>
+    <string name="illegal_move_try_again">Mouvement illégal, essayez à nouveau</string>
+    <string name="main_menu_startGame">Démarrer jeu</string>
+    <string name="main_menu_help">Aide</string>
+    <string name="main_menu_about">À propos</string>
+    <string name="main_menu_options">Les options</string>
+    <string name="main_menu_exit">Sortir</string>
+    <string name="main_menu_copyright">Droits d\'auteur</string>
+    <string name="dialog_alert">alerte</string>
+    <string name="dialog_message">Echecs poche\nPar Kobi Krasnoff</string>
+    <string name="dialog_ok_button">Ok</string>
+    <string name="activity_instructions">Il suffit de glisser les pièces blanches, à votre tour et jouer contre votre téléphone Android</string>
+    <string name="activity_return">Retour à l\'écran principal</string>
+    <string name="activity_gpl">pleine licence GNU</string>
+    <string name="activity_back">Retour</string>
+    <string name="options_return">Retour à l\'écran principal</string>
+    <string name="options_prompt">Choisissez le niveau</string>
+    <string-array name="options_level">
+        <item>niveau 1</item>
+        <item>niveau 2</item>
+        <item>niveau 3</item>
+        <item>niveau 4</item>
+        <item>niveau 5</item>
+        <item>niveau 6</item>
+        <item>niveau 7</item>
+        <item>niveau 8</item>
+    </string-array>
+    <string name="options_color_white">Blanc</string>
+    <string name="options_color_black">noire</string>
+    <string name="options_ok">OK</string>
+    <string name="options_cancel">Annuler</string>
+    <string name="confirmation_save_title">Confirmation</string>
+    <string name="confirmation_save_content">Voulez-vous pour sauver ce jeu?</string>
+    <string name="confirmation_save_ok">Oui</string>
+    <string name="confirmation_save_cancel">No</string>
+    <string name="confirmation_save_cancel2">Annuler</string>
+    <string name="confirmation_open_title">Confirmation</string>
+    <string name="confirmation_open_content">Vous avez un jeu enregistré dans votre mémoire.\nVoulez-vous continuer avec le jeu sauvé?</string>
+    <string name="confirmation_open_ok">Oui</string>
+    <string name="confirmation_open_cancel">No</string>
+    <string name="showPromotionPieceDialog_title">Choisissez un morceau</string>
+    <string name="showPromotionPieceDialog_queen">Reine</string>
+    <string name="showPromotionPieceDialog_rook">freux</string>
+    <string name="showPromotionPieceDialog_bishop">Bishop</string>
+    <string name="showPromotionPieceDialog_knight">chevalier</string>
+    <string name="activity_myMove">Mon déménagement</string>
+    <string name="activity_yourMove">Your Move</string>
+    <string name="activity_thinking">la pensée...</string>
+    <string name="activity_check">chèque!</string>
+    <string name="activity_mate">maté!!</string>
+    <string name="activity_draw">tirage!!</string>
+    <string name="activity_copyright">Pocket Chess Copyright (C) 2011 by Kobi Krasnoff\n\nThis program comes with ABSOLUTELY NO WARRANTY; This is free software, and you are welcome to redistribute it under certain conditions; Click the "Full GNU License" button for more details.\n\nCredits:\nThis program makes use of the "Chess Training Tools": Copyright  2009 by Dietrich Kappe.\nThis program makes use of the Chesspresso™ library: Copyright  2002 by Bernhard Seybold.\nChess pieces graphic design made by Colin M.L. Burnett: Copyright © 2011 by Colin M.L. Burnett\n\nMy email is: krasnoff.kobi@gmail.com\nProject site: http://code.google.com/p/pocket-chess-for-android/\nSource code can be found in the project site.</string>
+</resources>

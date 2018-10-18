@@ -1,0 +1,153 @@
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        /**
+         * Be careful at upgrading to higher version of gradle (e.g., > 3.0):
+         * Compilation may work but application will have error when executed due to AAPT2 exception.
+         * Disabling AAPT2 will hide an issue with AAPT2 and may cause to stop unit tests to work.
+         * Please update only after either the issue is fixed on Android side or fix the bug in the project for AAPT2.
+         * https://issuetracker.google.com/issues/38454212
+         * https://github.com/requery/requery/issues/467
+         */
+        classpath 'com.android.tools.build:gradle:2.3.3'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenCentral()
+}
+
+
+android {
+    compileSdkVersion = 27
+    buildToolsVersion = "27.0.2"
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    defaultConfig {
+        applicationId "com.example.chess"
+        versionCode 1
+        versionName "1.0"
+        minSdkVersion 24
+        targetSdkVersion 27
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    dexOptions {
+        preDexLibraries = false
+        additionalParameters = ["--core-library"]
+    }
+}
+
+repositories {
+    jcenter()
+    google()
+    maven { url  "https://dl.bintray.com/terryzhuo/DCAP" }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:27.0.2'
+    compile 'com.huawei.paas:sapphire-core:1.0.0'
+    }
+
+
+subprojects {
+    apply plugin: 'java-library'
+
+    repositories {
+        jcenter()
+        google()
+        maven { url  "https://dl.bintray.com/terryzhuo/DCAP" }
+    }
+
+    dependencies {
+        compile 'com.huawei.paas:sapphire-core:1.0.0'
+
+    }
+
+    task fatJar(type: Jar) {
+        manifest {
+            attributes 'Implementation-Title': 'Gradle Chessjar',
+                    'Implementation-Version': '1.0',
+                    'Main-Class': 'kobi.chess.MainActivity'
+        }
+        baseName = project.parent.name
+        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+        with jar
+    }
+    build.finalizedBy(fatJar)
+
+    task copyClasses(type: Copy) {
+        from "$projectDir.parent/build/intermediates/classes/debug/"
+        into 'build/classes/java/main/'
+    }
+
+    // Task for Stub compilation
+    task compileChessStubs(type: JavaCompile) {
+        source = sourceSets.main.java.srcDirs
+        classpath = sourceSets.main.compileClasspath
+        destinationDir = sourceSets.main.output.classesDir
+        options.incremental = true
+    }
+
+    // Task for Stub generation
+    task genChessStubs(type: JavaExec) {
+        main = "sapphire.compiler.StubGenerator"
+        classpath = sourceSets.main.runtimeClasspath
+
+        def pkgName = 'chessmanager'
+        def src = "$projectDir.parent/build/intermediates/classes/debug/chessmanager"
+        def dst = "$projectDir.parent/src/main/java/chessmanager/stubs/"
+        args src, pkgName, dst
+
+        def pkgName1 = 'engine'
+       def src1 = "$projectDir.parent/build/intermediates/classes/debug/engine"
+        def dst1 = "$projectDir.parent/src/main/java/engine/stubs/"
+           args src1, pkgName1, dst1
+
+    }
+    genChessStubs.mustRunAfter compileJava
+    genChessStubs.dependsOn copyClasses
+    compileChessStubs.dependsOn genChessStubs
+    fatJar.dependsOn compileChessStubs
+
+    task runOms(type: JavaExec) {
+        dependsOn fatJar
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'sapphire.oms.OMSServerImpl'
+        args project.property('omsIp'), project.property('omsPort')
+    }
+
+    task runKernelServer1(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'sapphire.kernel.server.KernelServerImpl'
+        args project.property('kernelServer1Ip'), project.property('kernelServer1Port'), project.property('omsIp'), project.property('omsPort')
+    }
+ task runKernelServer2 (type: JavaExec){
+     classpath = sourceSets.main.runtimeClasspath
+     main = 'sapphire.kernel.server.KernelServerImpl'
+     args project.property('kernelServer2Ip'), project.property('kernelServer2Port'), project.property('omsIp'), project.property('omsPort')
+
+ }
+
+}
+    // Task for Stub generation
+
+// Start kernel server with "gradlew runks"
+

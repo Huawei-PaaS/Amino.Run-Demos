@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/startGame" android:title="@string/main_menu_startGame"></item>
+	<item android:id="@+id/Copyright" android:title="@string/main_menu_copyright"></item>
+	<item android:id="@+id/help" android:title="@string/main_menu_help"></item>
+	<item android:id="@+id/about" android:title="@string/main_menu_about"></item>
+	<item android:id="@+id/exit" android:title="@string/main_menu_exit"></item>
+</menu>

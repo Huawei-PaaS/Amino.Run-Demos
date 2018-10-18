@@ -1,6 +1,5 @@
 package sapphire.appexamples.hankstodo.app;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import sapphire.app.*;
@@ -19,6 +18,11 @@ public class TodoList implements SapphireObject<CacheLeasePolicy>{
 		System.out.println("Inside todo: " + todo);
 		toDos.add(todo);
 		return "OK!";
+	}
+
+	public void removeToDo(int pos) {
+		toDos.remove(pos);
+		System.out.println("ToDo item removed.");
 	}
 
 	public void completeToDo(String todo) {

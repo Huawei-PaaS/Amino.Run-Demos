@@ -10,12 +10,20 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="sapphire.appexamples.hankstodo.glue.MainActivity"
+            android:name="sapphire.appexamples.hankstodo.glue.CreateToDo"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="sapphire.appexamples.hankstodo.glue.ToDoItems"
+            android:label="@string/todo_list"
+            android:parentActivityName="sapphire.appexamples.hankstodo.glue.CreateToDo" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sapphire.appexamples.hankstodo.glue.CreateToDo" />
         </activity>
     </application>
 
