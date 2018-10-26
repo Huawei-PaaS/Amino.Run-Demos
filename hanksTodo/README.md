@@ -16,3 +16,15 @@ EOF
 $ cd DCAP-Sapphire-Examples/hanksTodo/
 $ ./gradlew build
 ```
+
+### Run OMS
+```
+$ cd DCAP-Sapphire-Examples/hanksTodo/
+$ ./gradlew runoms
+```
+
+### Run KernelServer
+```
+$ cd DCAP-Sapphire-Examples/hanksTodo/
+$ ./gradlew runks
+```

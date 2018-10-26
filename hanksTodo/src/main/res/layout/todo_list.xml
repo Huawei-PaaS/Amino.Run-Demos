@@ -10,7 +10,7 @@
     tools:context="sapphire.appexamples.hankstodo.glue.ToDoItems" >
 
     <ListView
-        android:id="@+id/lvItems"
+        android:id="@+id/list_todo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnAddItem"

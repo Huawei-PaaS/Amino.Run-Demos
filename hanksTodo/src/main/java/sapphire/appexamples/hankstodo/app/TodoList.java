@@ -14,13 +14,12 @@ public class TodoList implements SapphireObject {
 	}
 
 	public String addToDo(String todo) {
-		System.out.println("Inside todo: " + todo);
 		toDos.add(todo);
 		return "OK!";
 	}
 
-	public void removeToDo(int pos) {
-		toDos.remove(pos);
+	public void removeToDo(String value) {
+		toDos.remove(value);
 		System.out.println("ToDo item removed.");
 	}
 
@@ -29,5 +28,9 @@ public class TodoList implements SapphireObject {
 
 	public ArrayList<Object> getHighPriority() {
 		return new ArrayList<Object>();
+	}
+
+	public ArrayList<Object> getAllItems(String name) {
+		return toDos;
 	}
 }

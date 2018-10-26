@@ -3,8 +3,8 @@ package sapphire.appexamples.hankstodo.device;
 import java.net.InetSocketAddress;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 
-import sapphire.app.DMSpec;
 import sapphire.app.Language;
 import sapphire.app.SapphireObjectSpec;
 import sapphire.appexamples.hankstodo.app.TodoList;
@@ -13,11 +13,8 @@ import sapphire.common.SapphireObjectID;
 import sapphire.kernel.server.KernelServer;
 import sapphire.kernel.server.KernelServerImpl;
 import sapphire.oms.OMSServer;
-import sapphire.policy.dht.DHTPolicy;
-
 
 public class TodoActivity {
-	public static TodoList tl;
 	public static TodoListManager tlm;
 
 	public static void setObject(String[] args){
@@ -30,10 +27,7 @@ public class TodoActivity {
 
 			SapphireObjectSpec spec = SapphireObjectSpec.newBuilder()
 					.setLang(Language.java)
-					.setJavaClassName("sapphire.appexamples.hankstodo.app.TodoListManager").addDMSpec(
-					DMSpec.newBuilder()
-							.setName(DHTPolicy.class.getName())
-							.create())
+					.setJavaClassName("sapphire.appexamples.hankstodo.app.TodoListManager")
 					.create();
 
 			SapphireObjectID sapphireObjId = server.createSapphireObject(spec.toString());
@@ -45,16 +39,32 @@ public class TodoActivity {
 	}
 
 	public static void createNewToDoList(String listName) {
-		tl = tlm.newTodoList(listName);
-		System.out.println("Received tl1: " + tl);
+		TodoList tl = tlm.newTodoList(listName);
+		System.out.println("Received tl: " + tl);
 	}
 
-	public static void addTaskItem(String item) {
+	public static void addTaskItem(String listName, String item) {
+		TodoList tl = tlm.newTodoList(listName);
 		String outcome = tl.addToDo(item);
 		System.out.println(outcome);
 	}
 
-	public static void removeTaskItem(int pos) {
-		tl.removeToDo(pos);
+	public static void removeTaskItem(String listName, String itemName) {
+		TodoList tl = tlm.newTodoList(listName);
+		tl.removeToDo(itemName);
+	}
+
+	public static ArrayList<Object> fetchToDoItems(String listName) {
+		TodoList tl = tlm.newTodoList(listName);
+		ArrayList<Object> myItems = tl.getAllItems(listName);
+		return myItems;
+	}
+
+	public static ArrayList<String> fetchToDoLists() {
+		return tlm.getAllTodoLists();
+	}
+
+	public static void removeToDo(String listName) {
+		tlm.deleteTodoList(listName);
 	}
 }
