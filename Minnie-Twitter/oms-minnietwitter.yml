@@ -1,39 +1,55 @@
-apiVersion: extensions/v1beta1
+apiVersion: extensions/v1beta1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  name: oms-minnietwitter-deploy
-  namespace: default
+  name: oms-deployment
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: oms-minnietwitter
+      app: oms
+  replicas: 1 # tells deployment to run 1 pods matching the template
   template:
     metadata:
       labels:
-        app: oms-minnietwitter
+        app: oms
     spec:
       containers:
-      - name: oms-minnietwitter
+      - name: oms
         image: dcap/minnietwitter:latest
-        imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 22346
+        - containerPort: 32557 # kernelserverport
+        - containerPort: 32555 # rmiport
         command: ["/root/dcap/start-oms.sh"]
-        securityContext:
-          privileged: true # FOR DEBUG
-          allowPrivilegeEscalation: true
-          capabilities:
-            add: ["NET_ADMIN", "SYS_TIME"]
+        env:
+          - name: MY_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: oms-minnietwitter-svc
+  name: oms-rmi-svc
 spec:
+  type: NodePort
   ports:
-  - port: 22346
-    targetPort: 22346
+  - port: 32555
+    targetPort: 32555
+    nodePort: 32555
     protocol: TCP
   selector:
-    app: oms-minnietwitter
+    app: oms
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oms-svc
+spec:
+  type: NodePort
+  ports:
+  - port: 32557
+    targetPort: 32557
+    nodePort: 32557
+    protocol: TCP
+  selector:
+    app: oms
+

@@ -12,3 +12,9 @@ get_service_ip() {
   local _svcname=$1
   service_ip=$(nslookup $_svcname | grep -A1 "Name:.*$_svcname" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 }
+
+get_node_ip() {
+  local _nodename=$(printenv MY_NODE_NAME)
+  node_ip=$(nslookup $_nodename | grep Address | tail -n1 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+}
+

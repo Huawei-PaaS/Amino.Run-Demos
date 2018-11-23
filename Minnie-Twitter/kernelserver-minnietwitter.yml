@@ -1,23 +1,56 @@
-apiVersion: extensions/v1beta1
+apiVersion: extensions/v1beta1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  name: kernelserver-minnietwitter-deploy
-  namespace: default
+  name: kernelserver-deployment
 spec:
-  replicas: 2
   selector:
     matchLabels:
-      app: kernelserver-minnietwitter
+      app: kernelserver
+  replicas: 1 # tells deployment to run 1 pod matching the template
   template:
     metadata:
       labels:
-        app: kernelserver-minnietwitter
+        app: kernelserver
     spec:
       containers:
-      - name: kernelserver-minnietwitter
+      - name: kernelserver
         image: dcap/minnietwitter:latest
-        imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 22345
+        - containerPort: 32558 # omsport
+        - containerPort: 32556 # rmiport
         command: ["/root/dcap/start-kernelserver.sh"]
-        args: ["oms-minnietwitter-svc", "22346"]
+        args: ["oms-svc", "32557"]
+        env:
+          - name: MY_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ks-rmi-svc
+spec:
+  type: NodePort
+  ports:
+  - port: 32556
+    targetPort: 32556
+    nodePort: 32556
+    protocol: TCP
+  selector:
+    app: kernelserver
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ks-svc
+spec:
+  type: NodePort
+  ports:
+  - port: 32558
+    targetPort: 32558
+    nodePort: 32558
+    protocol: TCP
+  selector:
+    app: kernelserver
+

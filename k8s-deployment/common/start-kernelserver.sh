@@ -8,13 +8,15 @@ source /root/dcap/common.inc
 
 
 get_container_ip
-KERNELSERVER_PORT=22345
-KERNELSERVER_IP=$container_ip
+KERNELSERVER_PORT=32558
+get_node_ip
+KERNELSERVER_IP=$node_ip
 
 OMS_PORT=$2
 OMS_SERVICE=$1
 get_service_ip $OMS_SERVICE
 OMS_IP=$service_ip
+SERVICE_PORT=32556
 
 if [ -z $KERNELSERVER_IP ]; then
   echo "ERROR: Failed to get container IP address"
@@ -26,4 +28,4 @@ if [ -z $OMS_IP ]; then
 fi
 
 echo "Starting KernelServer on $KERNELSERVER_IP:$KERNELSERVER_PORT, connecting to $OMS_SERVICE at $OMS_IP:$OMS_PORT .."
-java -cp "/root/dcap/jars/*" -Djava.rmi.server.useCodebaseOnly=false -Djava.security.policy=/dcap/client.policy sapphire.kernel.server.KernelServerImpl $KERNELSERVER_IP $KERNELSERVER_PORT $OMS_IP $OMS_PORT
+java -cp "/root/dcap/jars/*" -Djava.rmi.server.useCodebaseOnly=false -Djava.security.policy=/dcap/client.policy sapphire.kernel.server.KernelServerImpl $KERNELSERVER_IP $KERNELSERVER_PORT $OMS_IP $OMS_PORT --servicePort=$SERVICE_PORT

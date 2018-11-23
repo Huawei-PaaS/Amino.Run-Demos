@@ -111,7 +111,6 @@ task dockerfile(type: Dockerfile) {
     copyFile './scripts/common.inc', '/root/dcap/'
     copyFile './scripts/start-oms.sh', '/root/dcap/'
     copyFile './scripts/start-kernelserver.sh', '/root/dcap/'
-    copyFile './scripts/start-app.sh', '/root/dcap/'
     entryPoint 'tail', '-f', '/dev/null'
 }
 
@@ -177,23 +176,6 @@ deployer {
     }
 }
 
-deployer {
-    kubernetes {
-        id = project.property('appId')
-        baseUrl = project.property('baseUrl')
-        namespace = project.property('namespace')
-        strategy = project.property('strategy')
-        auth {
-            username = project.property('username')
-            password = project.property('password')
-        }
-        ssl {
-            trustAll = true
-        }
-        files = [file("minnietwitter-app.yml")]
-    }
-}
-
 task deployOms(type: Exec){
     dependsOn pushImage
     commandLine './gradlew', 'deploy',"--environmentId=oms"
@@ -202,11 +184,6 @@ task deployOms(type: Exec){
 task deployKernelServer(type: Exec){
     dependsOn deployOms
     commandLine './gradlew', 'deploy',"--environmentId=kernelserver"
-}
-
-task deployApp(type: Exec){
-    dependsOn deployKernelServer
-    commandLine './gradlew', 'deploy',"--environmentId=app"
 }
 
 subprojects {
