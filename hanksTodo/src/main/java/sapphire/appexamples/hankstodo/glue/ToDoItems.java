@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import sapphire.appexamples.hankstodo.device.TodoActivity;
 import sapphire.appexamples.hankstodo.glue.ListAdapter.customButtonListener;
@@ -81,17 +83,22 @@ public class ToDoItems extends Activity implements customButtonListener {
     private class FetchToDoListItem extends AsyncTask<String, Void, String>{
         protected String doInBackground(String... params) {
             String response = null;
-            final ArrayList<Object> allItems = TodoActivity.fetchToDoItems(params[0]);
-            if(allItems.isEmpty() == false) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for(int i=0; i<allItems.size(); i++) {
-                            String itemName = (String)allItems.get(i);
-                            adapter.add(itemName);
+            String allItems = TodoActivity.fetchToDoItems(params[0]);
+
+            if(allItems != null && !allItems.isEmpty()) {
+                String[] items = allItems.split(", ");
+                final List<String> list = new ArrayList<String>(Arrays.asList(items));
+                if(!list.isEmpty()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(int i=0; i<list.size(); i++) {
+                                String itemName = list.get(i);
+                                adapter.add(itemName);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
             return response;
         }

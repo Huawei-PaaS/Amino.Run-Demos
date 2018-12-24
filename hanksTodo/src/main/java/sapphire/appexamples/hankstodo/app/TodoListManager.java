@@ -11,39 +11,55 @@ import sapphire.app.SapphireObject;
 import static sapphire.runtime.Sapphire.*;
 
 import sapphire.app.SapphireObjectSpec;
-import sapphire.policy.dht.DHTKey;
+import sapphire.common.SapphireObjectCreationException;
 import sapphire.policy.dht.DHTPolicy;
+import sapphire.policy.replication.ConsensusRSMPolicy;
 
 public class TodoListManager implements SapphireObject{
-    LinkedHashMap<DHTKey, TodoList> todoLists = new LinkedHashMap<DHTKey, TodoList>();
+    LinkedHashMap<String, TodoList> todoLists = new LinkedHashMap<>();
 
-	public TodoList newTodoList(String name) {
-		TodoList t = todoLists.get(new DHTKey(name));
+	public TodoListManager() {
+		System.out.println("Instantiating TodoListManager...");
+	}
+
+	public void doSomething(String input) {
+		System.out.println("Input received: " + input);
+	}
+
+	public TodoList newTodoList(String id) throws SapphireObjectCreationException {
+		TodoList t = todoLists.get(id);
 		if (t == null) {
-
-			SapphireObjectSpec spec = SapphireObjectSpec.newBuilder()
+			SapphireObjectSpec spec;
+			spec = SapphireObjectSpec.newBuilder()
 					.setLang(Language.java)
-					.setJavaClassName(TodoList.class.getName()).addDMSpec(
+					.setJavaClassName(TodoList.class.getName())
+					.addDMSpec(
 							DMSpec.newBuilder()
 									.setName(DHTPolicy.class.getName())
 									.create())
+					.addDMSpec(
+							DMSpec.newBuilder()
+									.setName(ConsensusRSMPolicy.class.getName())
+									.create())
 					.create();
 
-			t = (TodoList) new_(spec, name);
-			todoLists.put(new DHTKey(name), t);
-			System.out.println("Created new list");
-			System.out.println("This managers lists" + todoLists.toString());
+			t = (TodoList) new_(spec, id);
+			todoLists.put(id, t);
+			System.out.println("Created new Todo list");
+		} else {
+			System.out.println("ToDoList for ID: "+ id + " already exists.");
 		}
+		System.out.println("This managers lists" + todoLists.toString());
 		return t;
 	}
 
 	public ArrayList<String> getAllTodoLists() {
-		if(todoLists.isEmpty() == false) {
+		if(!todoLists.isEmpty()) {
 			ArrayList<String> todoList = new ArrayList();
-			Iterator itr = todoLists.entrySet().iterator();
+			Iterator<Map.Entry<String, TodoList>> itr = todoLists.entrySet().iterator();
 			while(itr.hasNext()) {
-				Map.Entry entry = (Map.Entry) itr.next();
-				todoList.add(((DHTKey)entry.getKey()).getIdentifier());
+				Map.Entry<String, TodoList> entry = itr.next();
+				todoList.add(entry.getKey());
 			}
 			return todoList;
 		} else {
@@ -51,8 +67,19 @@ public class TodoListManager implements SapphireObject{
 		}
 	}
 
+	public TodoList getToDoList(String id) {
+		TodoList t = todoLists.get(id);
+		if (t == null) {
+			return null;
+		}
+		return t;
+	}
+
 	public void deleteTodoList(String name) {
-		todoLists.remove(new DHTKey(name));
-		System.out.println("ToDoList Deleted");
+		TodoList t = todoLists.remove(name);
+		if (t != null) {
+			delete_(t);
+		}
+        System.out.println("ToDoList Deleted");
 	}
 }

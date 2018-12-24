@@ -1,36 +1,71 @@
 package sapphire.appexamples.hankstodo.app;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import sapphire.app.*;
 
 public class TodoList implements SapphireObject {
-	ArrayList<Object> toDos = new ArrayList<Object>();
-	String name = "Hanks todo";
+    HashMap<String, String> toDos;
+    String id = "0";
 
-	public TodoList(String name) {
-		toDos = new ArrayList<Object>();
-		this.name = name;
-	}
+    public TodoList(String id) {
+        toDos = new HashMap<>();
+        this.id = id;
+    }
 
-	public String addToDo(String todo) {
-		toDos.add(todo);
-		return "OK!";
-	}
+    /**
+     * Add to do list content with subject and content.
+     *
+     * @param subject
+     * @param content
+     * @return
+     */
+    public String addToDo(String subject, String content) {
+        System.out.println("TodoList>> subject: " + subject + " addToDo: " + content);
+        String oldContent = toDos.get(subject);
+        oldContent = (oldContent == null) ? "" : oldContent + ", ";
+        String newContent = oldContent + content;
+        toDos.put(subject, newContent);
+        return "OK!";
+    }
 
-	public void removeToDo(String value) {
-		toDos.remove(value);
-		System.out.println("ToDo item removed.");
-	}
+    /**
+     * Get to do list content based on subject.
+     *
+     * @param subject
+     * @return
+     */
+    public String getToDo(String subject) {
+        return toDos.get(subject);
+    }
 
-	public void completeToDo(String todo) {
-	}
+    public void completeToDo(String content) {}
 
 	public ArrayList<Object> getHighPriority() {
 		return new ArrayList<Object>();
 	}
 
-	public ArrayList<Object> getAllItems(String name) {
-		return toDos;
+	public void removeToDo(String subject, String content) {
+		String oldContent = toDos.get(subject);
+        String[] items = oldContent.split(", ");
+        List<String> list = new ArrayList<String>(Arrays.asList(items));
+        list.remove(content);
+        items = list.toArray(new String[0]);
+        String newContent = convertStringArrayToString(items, ", ");
+		toDos.put(subject, newContent);
+		System.out.println("ToDo item removed.");
 	}
+
+    private static String convertStringArrayToString(String[] strArr, String delimiter) {
+        StringBuilder sb = new StringBuilder();
+        for (String str : strArr)
+            sb.append(str).append(delimiter);
+        if(sb.length() >= 2) {
+            return sb.substring(0, sb.length() - 2);
+        }
+        return sb.substring(0, sb.length());
+    }
 }

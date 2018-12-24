@@ -14,6 +14,8 @@ import sapphire.kernel.server.KernelServer;
 import sapphire.kernel.server.KernelServerImpl;
 import sapphire.oms.OMSServer;
 
+import static java.lang.Thread.sleep;
+
 public class TodoActivity {
 	public static TodoListManager tlm;
 
@@ -39,24 +41,49 @@ public class TodoActivity {
 	}
 
 	public static void createNewToDoList(String listName) {
-		TodoList tl = tlm.newTodoList(listName);
-		System.out.println("Received tl: " + tl);
+		TodoList tl = null;
+		try {
+			tl = tlm.newTodoList(listName);
+			// Consensus policy needs some time after creating new Sapphire object; otherwise,
+			// leader election may fail.
+			sleep(7000);
+			System.out.println("Received tl: " + tl);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void addTaskItem(String listName, String item) {
-		TodoList tl = tlm.newTodoList(listName);
-		String outcome = tl.addToDo(item);
-		System.out.println(outcome);
+		TodoList tl = null;
+		try {
+			tl = tlm.newTodoList(listName);
+			String outcome = tl.addToDo(listName, item);
+			System.out.println(outcome);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void removeTaskItem(String listName, String itemName) {
-		TodoList tl = tlm.newTodoList(listName);
-		tl.removeToDo(itemName);
+		TodoList tl = null;
+		try {
+			tl = tlm.newTodoList(listName);
+			tl.removeToDo(listName, itemName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public static ArrayList<Object> fetchToDoItems(String listName) {
-		TodoList tl = tlm.newTodoList(listName);
-		ArrayList<Object> myItems = tl.getAllItems(listName);
+	public static String fetchToDoItems(String listName) {
+		TodoList tl;
+		String myItems = null;
+		try {
+			tl = tlm.newTodoList(listName);
+			myItems = tl.getToDo(listName);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return myItems;
 	}
 
