@@ -1,4 +1,4 @@
-package sapphire.appexamples.minnietwitter.glue;
+package amino.run.appexamples.minnietwitter.glue;
 
 import android.app.AlertDialog;
 import android.content.Context;

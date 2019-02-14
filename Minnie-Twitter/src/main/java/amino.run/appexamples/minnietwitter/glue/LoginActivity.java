@@ -1,4 +1,4 @@
-package sapphire.appexamples.minnietwitter.glue;
+package amino.run.appexamples.minnietwitter.glue;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.example.minnietwitter.R;
 
-import sapphire.appexamples.minnietwitter.app.User;
-import sapphire.appexamples.minnietwitter.device.generator.TwitterWorldGenerator;
+import amino.run.appexamples.minnietwitter.app.User;
+import amino.run.appexamples.minnietwitter.device.generator.TwitterWorldGenerator;
 
 public class LoginActivity extends Activity {
     EditText txtUsername, txtPassword;

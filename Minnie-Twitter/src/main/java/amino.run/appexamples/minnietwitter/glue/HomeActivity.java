@@ -1,4 +1,4 @@
-package sapphire.appexamples.minnietwitter.glue;
+package amino.run.appexamples.minnietwitter.glue;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import com.example.minnietwitter.R;
 
 import java.util.HashMap;
 
-import sapphire.appexamples.minnietwitter.device.generator.TwitterWorldGenerator;
+import amino.run.appexamples.minnietwitter.device.generator.TwitterWorldGenerator;
 
 public class HomeActivity extends Activity {
     SessionManagement session;

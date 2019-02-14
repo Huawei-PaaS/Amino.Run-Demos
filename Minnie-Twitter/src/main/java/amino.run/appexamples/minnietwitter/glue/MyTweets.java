@@ -1,4 +1,4 @@
-package sapphire.appexamples.minnietwitter.glue;
+package amino.run.appexamples.minnietwitter.glue;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -12,7 +12,7 @@ import com.example.minnietwitter.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import sapphire.appexamples.minnietwitter.device.generator.TwitterWorldGenerator;
+import amino.run.appexamples.minnietwitter.device.generator.TwitterWorldGenerator;
 
 public class MyTweets extends Activity {
     String userOne;

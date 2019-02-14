@@ -1,4 +1,4 @@
-package sapphire.appexamples.minnietwitter.app;
+package amino.run.appexamples.minnietwitter.app;
 
 import java.io.Serializable;
 import java.util.ArrayList;

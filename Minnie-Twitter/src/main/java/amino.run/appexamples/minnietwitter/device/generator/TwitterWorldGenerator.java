@@ -1,49 +1,62 @@
-package sapphire.appexamples.minnietwitter.device.generator;
+package amino.run.appexamples.minnietwitter.device.generator;
 
 import java.net.InetSocketAddress;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import sapphire.app.Language;
-import sapphire.app.SapphireObjectSpec;
-import sapphire.appexamples.minnietwitter.app.TagManager;
-import sapphire.appexamples.minnietwitter.app.Timeline;
-import sapphire.appexamples.minnietwitter.app.Tweet;
-import sapphire.appexamples.minnietwitter.app.TweetContainer;
-import sapphire.appexamples.minnietwitter.app.TwitterManager;
-import sapphire.appexamples.minnietwitter.app.UserManager;
-import sapphire.appexamples.minnietwitter.app.User;
-import sapphire.common.SapphireObjectID;
-import sapphire.kernel.server.KernelServer;
-import sapphire.kernel.server.KernelServerImpl;
-import sapphire.oms.OMSServer;
+import amino.run.app.Language;
+import amino.run.app.MicroServiceSpec;
+import amino.run.appexamples.minnietwitter.app.TagManager;
+import amino.run.appexamples.minnietwitter.app.Timeline;
+import amino.run.appexamples.minnietwitter.app.Tweet;
+import amino.run.appexamples.minnietwitter.app.TweetContainer;
+import amino.run.appexamples.minnietwitter.app.TwitterManager;
+import amino.run.appexamples.minnietwitter.app.UserManager;
+import amino.run.appexamples.minnietwitter.app.User;
+import amino.run.app.Registry;
+import amino.run.common.MicroServiceID;
+import amino.run.kernel.server.KernelServer;
+import amino.run.kernel.server.KernelServerImpl;
+import amino.run.oms.OMSServer;
 
 public class TwitterWorldGenerator {
 	public static UserManager userManager;
 
 	public static void setObject(String[] args){
-		Registry registry;
+		java.rmi.registry.Registry registry;
 		try {
 			registry = LocateRegistry.getRegistry(args[0], Integer.parseInt(args[1]));
-			OMSServer server = (OMSServer) registry.lookup("SapphireOMS");
+			Registry server = (Registry) registry.lookup("SapphireOMS");
 
 			KernelServer nodeServer = new KernelServerImpl(new InetSocketAddress(args[2], Integer.parseInt(args[3])), new InetSocketAddress(args[0], Integer.parseInt(args[1])));
-
 			/* Creating the Spec */
 
-			SapphireObjectSpec spec = SapphireObjectSpec.newBuilder()
-					.setLang(Language.java)
-					.setJavaClassName("sapphire.appexamples.minnietwitter.app.TwitterManager")
-					.create();
-
 			/* Get Twitter and User Manager */
-			SapphireObjectID sapphireObjId = server.createSapphireObject(spec.toString());
-			TwitterManager tm = (TwitterManager) server.acquireSapphireObjectStub(sapphireObjId);
+			MicroServiceSpec spec =
+					MicroServiceSpec.newBuilder()
+							.setLang(Language.java)
+							.setJavaClassName("amino.run.appexamples.minnietwitter.app.TwitterManager")
+							.create();
+
+			MicroServiceID microServiceId = server.create(spec.toString());
+			TwitterManager tm = (TwitterManager) server.acquireStub(microServiceId);
 
 			/* To set a name to sapphire object. It is required to set the name if the object has to be shared */
-			server.setSapphireObjectName(sapphireObjId, "MyTwitterManager");
+			server.setName(microServiceId, "MyTwitterManager");
+
+            /* Attach to sapphire object is to get reference to shared sapphire object. Generally it
+            is not done in the same thread which creates sapphire object. In this example,
+            Twitter manager sapphire object is created just above in same thread. Below attach call
+            has no significance. It is just used to show the usage of API. */
+			TwitterManager tmAttached =
+					(TwitterManager) server.attachTo("MyTwitterManager");
+
+            /* Detach from the shared sapphire object. It is necessary to explicitly call detach to
+            un-reference the sapphire object. This call is not required here if attach call was not
+            made above */
+			server.detachFrom("MyTwitterManager");
 
 			userManager = tm.getUserManager();
 			TagManager tagManager = tm.getTagManager();

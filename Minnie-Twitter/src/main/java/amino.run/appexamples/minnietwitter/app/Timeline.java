@@ -1,11 +1,13 @@
-package sapphire.appexamples.minnietwitter.app;
+package amino.run.appexamples.minnietwitter.app;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import sapphire.app.SapphireObject;
+import amino.run.app.SapphireObject;
+import amino.run.runtime.SapphireConfiguration;
 
 
+@SapphireConfiguration(Policies = "amino.run.policy.atleastoncerpc.AtLeastOnceRPCPolicy")
 public class Timeline implements SapphireObject {
 	//private User user;
 	private String userName;
@@ -85,10 +87,10 @@ public class Timeline implements SapphireObject {
 		return tc.getFavorited(from, to);
 	}
 
-	private TweetContainer getTweetContainer(int tweetId) {
-		int pos = tweets.size() - 1 - tweetId;
-		return tweets.get(pos);
-	}
+    private TweetContainer getTweetContainer(int tweetId) {
+        int pos = tweets.size() - 1 - tweetId;
+        return tweets.get(pos);
+    }
 
 	public List getTweetsList() {
 		return tweets;
