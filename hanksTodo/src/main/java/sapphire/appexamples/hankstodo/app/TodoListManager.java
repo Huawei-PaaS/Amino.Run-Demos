@@ -1,7 +1,6 @@
 package sapphire.appexamples.hankstodo.app;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -56,10 +55,8 @@ public class TodoListManager implements SapphireObject{
 	public ArrayList<String> getAllTodoLists() {
 		if(!todoLists.isEmpty()) {
 			ArrayList<String> todoList = new ArrayList();
-			Iterator<Map.Entry<String, TodoList>> itr = todoLists.entrySet().iterator();
-			while(itr.hasNext()) {
-				Map.Entry<String, TodoList> entry = itr.next();
-				todoList.add(entry.getKey());
+			for (Map.Entry<String, TodoList> todo:todoLists.entrySet()){
+				todoList.add(todo.getKey());
 			}
 			return todoList;
 		} else {
@@ -69,9 +66,6 @@ public class TodoListManager implements SapphireObject{
 
 	public TodoList getToDoList(String id) {
 		TodoList t = todoLists.get(id);
-		if (t == null) {
-			return null;
-		}
 		return t;
 	}
 

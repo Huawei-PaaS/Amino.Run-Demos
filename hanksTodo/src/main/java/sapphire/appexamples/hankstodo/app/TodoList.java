@@ -63,8 +63,8 @@ public class TodoList implements SapphireObject {
         StringBuilder sb = new StringBuilder();
         for (String str : strArr)
             sb.append(str).append(delimiter);
-        if(sb.length() >= 2) {
-            return sb.substring(0, sb.length() - 2);
+        if(sb.length() >= delimiter.length()) {
+            return sb.substring(0, sb.length() - delimiter.length());
         }
         return sb.substring(0, sb.length());
     }

@@ -112,4 +112,6 @@ subprojects {
         main = 'sapphire.kernel.server.KernelServerImpl'
         args project.property('kernelServerIp'), project.property('kernelServerPort'), project.property('omsIp'), project.property('omsPort')
     }
+
+    //Todo: Add gradle task for running app in emulator from command line.
 }
