@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import sapphire.app.*;
+import amino.run.app.SapphireObject;
 
 public class TodoList implements SapphireObject {
     HashMap<String, String> toDos;

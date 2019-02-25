@@ -2,17 +2,16 @@ package sapphire.appexamples.hankstodo.device;
 
 import java.net.InetSocketAddress;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
 
-import sapphire.app.Language;
-import sapphire.app.SapphireObjectSpec;
+import amino.run.app.Language;
+import amino.run.app.MicroServiceSpec;
+import amino.run.app.Registry;
+import amino.run.common.MicroServiceID;
+import amino.run.kernel.server.KernelServer;
+import amino.run.kernel.server.KernelServerImpl;
 import sapphire.appexamples.hankstodo.app.TodoList;
 import sapphire.appexamples.hankstodo.app.TodoListManager;
-import sapphire.common.SapphireObjectID;
-import sapphire.kernel.server.KernelServer;
-import sapphire.kernel.server.KernelServerImpl;
-import sapphire.oms.OMSServer;
 
 import static java.lang.Thread.sleep;
 
@@ -20,20 +19,20 @@ public class TodoActivity {
 	public static TodoListManager tlm;
 
 	public static void setObject(String[] args){
-		Registry registry;
+		java.rmi.registry.Registry registry;
 		try {
 			registry = LocateRegistry.getRegistry(args[0], Integer.parseInt(args[1]));
-			OMSServer server = (OMSServer) registry.lookup("SapphireOMS");
+			Registry server = (Registry) registry.lookup("SapphireOMS");
 
 			KernelServer nodeServer = new KernelServerImpl(new InetSocketAddress(args[2], Integer.parseInt(args[3])), new InetSocketAddress(args[0], Integer.parseInt(args[1])));
 
-			SapphireObjectSpec spec = SapphireObjectSpec.newBuilder()
+			MicroServiceSpec spec = MicroServiceSpec.newBuilder()
 					.setLang(Language.java)
 					.setJavaClassName("sapphire.appexamples.hankstodo.app.TodoListManager")
 					.create();
 
-			SapphireObjectID sapphireObjId = server.createSapphireObject(spec.toString());
-			tlm = (TodoListManager)server.acquireSapphireObjectStub(sapphireObjId);
+			MicroServiceID microServiceId = server.create(spec.toString());
+			tlm = (TodoListManager)server.acquireStub(microServiceId);
 			System.out.println("Received tlm: " + tlm);
 		} catch (Exception e) {
 			e.printStackTrace();

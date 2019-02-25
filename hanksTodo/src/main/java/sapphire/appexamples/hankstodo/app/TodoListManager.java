@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import sapphire.app.DMSpec;
-import sapphire.app.Language;
-import sapphire.app.SapphireObject;
-import static sapphire.runtime.Sapphire.*;
+import amino.run.app.DMSpec;
+import amino.run.app.Language;
+import amino.run.app.MicroServiceSpec;
+import amino.run.app.SapphireObject;
+import amino.run.common.MicroServiceCreationException;
+import amino.run.policy.dht.DHTPolicy;
+import amino.run.policy.replication.ConsensusRSMPolicy;
 
-import sapphire.app.SapphireObjectSpec;
-import sapphire.common.SapphireObjectCreationException;
-import sapphire.policy.dht.DHTPolicy;
-import sapphire.policy.replication.ConsensusRSMPolicy;
+import static amino.run.runtime.Sapphire.delete_;
+import static amino.run.runtime.Sapphire.new_;
 
 public class TodoListManager implements SapphireObject{
     LinkedHashMap<String, TodoList> todoLists = new LinkedHashMap<>();
@@ -25,11 +26,11 @@ public class TodoListManager implements SapphireObject{
 		System.out.println("Input received: " + input);
 	}
 
-	public TodoList newTodoList(String id) throws SapphireObjectCreationException {
+	public TodoList newTodoList(String id) throws MicroServiceCreationException {
 		TodoList t = todoLists.get(id);
 		if (t == null) {
-			SapphireObjectSpec spec;
-			spec = SapphireObjectSpec.newBuilder()
+			MicroServiceSpec spec;
+			spec = MicroServiceSpec.newBuilder()
 					.setLang(Language.java)
 					.setJavaClassName(TodoList.class.getName())
 					.addDMSpec(

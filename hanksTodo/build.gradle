@@ -89,7 +89,7 @@ subprojects {
 
     // Task for Stub generation
     task genHanksTodoStubs(type: JavaExec) {
-        main = "sapphire.compiler.StubGenerator"
+        main = "amino.run.compiler.StubGenerator"
         classpath = sourceSets.main.runtimeClasspath
         def pkgName = 'sapphire.appexamples.hankstodo.app'
         def src = "$projectDir.parent/build/intermediates/classes/debug/sapphire/appexamples/hankstodo/app/"
@@ -103,13 +103,13 @@ subprojects {
 
     task runoms(type: JavaExec) {
         classpath = sourceSets.main.runtimeClasspath
-        main = 'sapphire.oms.OMSServerImpl'
+        main = 'amino.run.oms.OMSServerImpl'
         args project.property('omsIp'), project.property('omsPort')
     }
 
     task runks(type: JavaExec) {
         classpath = sourceSets.main.runtimeClasspath
-        main = 'sapphire.kernel.server.KernelServerImpl'
+        main = 'amino.run.kernel.server.KernelServerImpl'
         args project.property('kernelServerIp'), project.property('kernelServerPort'), project.property('omsIp'), project.property('omsPort')
     }
 
