@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.minnietwitter.R;
 
@@ -61,7 +62,11 @@ public class LoginActivity extends Activity {
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
         intent.putExtra("username", username);
-        new DoLogin().execute(username, password);
+        if(username.matches("") || password.matches("")) {
+            Toast.makeText(this, "Username, Password cannot be empty!!", Toast.LENGTH_SHORT).show();
+        } else {
+            new DoLogin().execute(username, password);
+        }
     }
 
     private class DoLogin extends AsyncTask<String, Void, User> {

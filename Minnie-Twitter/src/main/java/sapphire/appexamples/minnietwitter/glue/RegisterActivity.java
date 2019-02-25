@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.minnietwitter.R;
 
@@ -32,17 +33,21 @@ public class RegisterActivity extends Activity {
     }
 
     public void registerUser(View view) {
-        new NewUser().execute();
+        EditText editText1 = (EditText) findViewById(R.id.reg_fullname);
+        String username = editText1.getText().toString();
+        EditText editText2 = (EditText) findViewById(R.id.reg_password);
+        String password = editText2.getText().toString();
+        if(username.matches("") || password.matches("")) {
+            Toast.makeText(this, "Username, Password cannot be empty!!", Toast.LENGTH_SHORT).show();
+        } else {
+            new NewUser().execute(username, password);
+        }
     }
 
     private class NewUser extends AsyncTask<String, Void, User> {
         protected User doInBackground(String... params) {
-            EditText editText1 = (EditText) findViewById(R.id.reg_fullname);
-            String username = editText1.getText().toString();
-            EditText editText2 = (EditText) findViewById(R.id.reg_password);
-            String password = editText2.getText().toString();
             try {
-                user = TwitterWorldGenerator.registerUser(username, password);
+                user = TwitterWorldGenerator.registerUser(params[0], params[1]);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
