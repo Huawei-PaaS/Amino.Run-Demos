@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import amino.run.app.MicroService;
+import amino.run.policy.mobility.explicitmigration.ExplicitMigrator;
+import amino.run.policy.mobility.explicitmigration.MigrationException;
 import chesspresso.*;
 import chesspresso.move.*;
 import chesspresso.position.*;
@@ -23,14 +25,12 @@ import chesspresso.position.*;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 
-public class SimpleEngine implements ChessEngine, MicroService {
+public class SimpleEngine implements ChessEngine, MicroService, ExplicitMigrator {
 	private Position position;
 	private boolean computerIsWhite;
 	private int ply;
 
 	// Moved the following members to private as Sapphire Object does not allow to have public member variables
-	//public final static int MATE = 50000;
-	//public final static int INF = 100000;
 	private final static int MATE = 50000;
 	private final static int INF = 100000;
 	private long nodes;
@@ -38,41 +38,36 @@ public class SimpleEngine implements ChessEngine, MicroService {
 	private int bscore;
 	private OpeningDB book;
 	private short killers[];
-	private static int cnt = 0;
 
 	public synchronized String lastMove() {
 		return Move.getString(position.getLastShortMove());
 	}
-	public SimpleEngine() {
-System.out.println("Inside the Simple Engine");
 
+	public SimpleEngine() {
 		killers = new short[200];
-//		reset();
+		// reset();
 		position = Position.createInitialPosition();
 		ply = 0;
 		// load the book
-	book = ChessVisualizationTrainer.book;
-
+		book = ChessVisualizationTrainer.book;
 	}
+
 	/* (non-Javadoc)
 	 * @see com.imaginot.chess.engine.ChessEngine#reset()
 	 */
 	public synchronized void reset() {
-	//	position = Position.createInitialPosition();
 		ply = 0;
 	}
 
-	public void migrateObject(InetSocketAddress serverInfo) throws Exception {
-		System.out.println("Inside the migrateObject of app directly with count as " + cnt++);
-		System.out.println("Object has been migrated to kernal server with  "+serverInfo.getHostName()+" : "+serverInfo.getPort());
+	@Override
+	public void migrateTo(InetSocketAddress serverInfo) throws MigrationException {
+		System.out.println("Object has been migrated to kernel server with  " + serverInfo.getHostName() + " : " + serverInfo.getPort());
 	}
 
 	/* (non-Javadoc)
 	 * @see com.imaginot.chess.engine.ChessEngine#go()
 	 */
 	public synchronized String go() {
-		System.out.println("---***---***PROCESSING BACKEND OF AUTOMATED MOVE - " + cnt++ + "***---***---");
-		//System.out.println("Inside the go() of SimpleEngine");
 		if (isDraw()) {
 			return "DRAW";
 		} else if (isMate()) {
@@ -96,7 +91,6 @@ System.out.println("Inside the Simple Engine");
 				// use this to reward certain positional characteristics for the
 				// computer
 				computerIsWhite = (position.getToPlay() == Chess.WHITE);
-				//System.err.println("Computer white = " + computerIsWhite);
 				for (int i = 0; i < killers.length; i++) {
 					killers[i] = Move.NO_MOVE;
 				}
@@ -192,13 +186,6 @@ System.out.println("Inside the Simple Engine");
 				eval[i] = INF;
 				continue;
 			}
-			/*try {
-				position.doMove(a[i]);
-			} catch (Exception ignore) {
-				continue;
-			}
-			eval[i] = -qsearch(-INF, INF);
-			position.undoMove();*/
 
 			if (Move.isCapturing(a[i])) {
 				int victim1 = position.getPiece(Move.getToSqi(a[i]));
@@ -284,11 +271,6 @@ System.out.println("Inside the Simple Engine");
 		return false;
 	}
 
-	// Alpha Beta window
-	//public final int ABWIN = 30;
-	//public final int SEARCH_DEPTH = 10; // 4 = 1 ply
-	//public final int MAX_PLY = 6;
-
 	private int ABWIN = 30;
 	private int SEARCH_DEPTH = 10; // 4 = 1 ply
 	private int MAX_PLY = 6;
@@ -317,15 +299,8 @@ System.out.println("Inside the Simple Engine");
 			lastNodes = nodes;
 			int val = -AlphaBeta(SEARCH_DEPTH, -beta, -alpha, 0);
 
-			/*if (val <= alpha) {
-				// redo the search
-				System.err.println("Alpha Research");
-				alpha = -INF;
-				val = -AlphaBeta(SEARCH_DEPTH, -beta, -alpha, 0);
-			}*/
 			if (val >= beta) {
 				// redo the search
-				//System.err.println("Beta Research");
 				beta = INF;
 				val = -AlphaBeta(SEARCH_DEPTH, -beta, -alpha, 0);
 			}
@@ -340,7 +315,6 @@ System.out.println("Inside the Simple Engine");
 
 		}
 
-		//System.err.println("Total Nodes " + nodes);
 		return best;
 	}
 
@@ -401,7 +375,6 @@ System.out.println("Inside the Simple Engine");
 			position.undoMove();
 
 			if (val >= beta) {
-				//System.err.println("Cutoff at depth " + howDeep);
 				killers[howDeep] = moves[i];
 				RecordHash(howDeep, beta, HashEntry.hashfBETA);
 				return beta;
@@ -807,8 +780,6 @@ System.out.println("Inside the Simple Engine");
 	 * @see com.imaginot.chess.engine.ChessEngine#isWhiteTurn()
 	 */
 	public synchronized boolean isWhiteTurn() {
-		//return Position.isWhiteToPlay(position.getHashCode());
-		//return (position.getPlyNumber()%2)==0;
 		return (position.getToPlay() == Chess.WHITE);
 	}
 
@@ -906,7 +877,6 @@ System.out.println("Inside the Simple Engine");
 		public int depth;
 		public int flags;
 		public int value;
-		//public short best;
 	}
 
 	int ProbeHash(int depth, int alpha, int beta) {
@@ -922,7 +892,6 @@ System.out.println("Inside the Simple Engine");
 				if ((he.flags == he.hashfBETA) && (he.value >= beta))
 					return beta;
 			}
-			//RememberBestMove();
 		}
 
 		return HashEntry.valUNKNOWN;

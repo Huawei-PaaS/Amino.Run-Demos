@@ -329,7 +329,7 @@ public class MainActivity extends Activity {
 				}else {
 					 ksInfo = new  InetSocketAddress(Configuration.kernelServerAddress[2], Integer.parseInt(Configuration.kernelServerAddress[3]));
 				}
-				((SimpleEngine) engine).migrateObject(ksInfo);
+				((SimpleEngine) engine).migrateTo(ksInfo);
                 cnt++;
             } catch (Exception e) {
 
