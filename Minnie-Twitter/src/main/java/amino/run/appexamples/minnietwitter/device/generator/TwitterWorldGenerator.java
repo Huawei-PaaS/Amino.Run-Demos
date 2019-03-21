@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import amino.run.app.Language;
 import amino.run.app.MicroServiceSpec;
@@ -20,6 +21,7 @@ import amino.run.kernel.server.KernelServer;
 import amino.run.kernel.server.KernelServerImpl;
 
 public class TwitterWorldGenerator {
+	private static final Logger logger = Logger.getLogger(TwitterWorldGenerator.class.getName());
 	public static UserManager userManager;
 
 	public static void setObject(String[] args){
@@ -69,7 +71,6 @@ public class TwitterWorldGenerator {
 		if(user == null){
 			try {
 				user = userManager.addUser(username, password);
-				System.out.println("Added new user: "+username);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -100,9 +101,10 @@ public class TwitterWorldGenerator {
 				t.tweet(message);
 				tweetStatus = true;
 			} catch(Exception e) {
-				System.out.print(", Failed ");
+				e.printStackTrace();
+				return tweetStatus;
 			}
-			System.out.println("\n@user" + " tweeted: " + message);
+			logger.info("@user " + name + " tweeted: " + message);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -119,13 +121,8 @@ public class TwitterWorldGenerator {
 			List<TweetContainer> tweetList = t.getTweetsList();
 			int size = tweetList.size();
 			myTweets = t.getTweets(0, size);
-			for (int i = 0; i < myTweets.size(); i++) {
-				Tweet t1 = myTweets.get(i);
-				String text = t1.getText();
-				allTweets.add(text);
-			}
-			for (String n : allTweets) {
-				System.out.println(n);
+			for(Tweet tw : myTweets){
+				allTweets.add(tw.getText());
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

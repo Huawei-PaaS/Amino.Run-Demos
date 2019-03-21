@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import amino.run.app.MicroService;
 import amino.run.policy.dht.DHTKey;
 
 
 public class TagManager implements MicroService {
+	private static final Logger logger = Logger.getLogger(TagManager.class.getName());
 	Map<DHTKey, Tag> tags = new Hashtable<DHTKey, Tag>();
 	
 	public TagManager() {
@@ -25,7 +27,7 @@ public class TagManager implements MicroService {
 			tags.put(newKey, tag);
 		}
 
-		System.out.println("Adding tag: " + label);
+		logger.info("Adding tag: " + label + " for tweet: " + t.getText());
 		tag.addTweet(t);
 	}
 	

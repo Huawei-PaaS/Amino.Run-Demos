@@ -15,7 +15,7 @@ import static amino.run.runtime.MicroService.delete_;
 import static amino.run.runtime.MicroService.new_;
 
 public class User implements MicroService {
-	private static Logger logger = Logger.getLogger(User.class.getName());
+	private static final Logger logger = Logger.getLogger(User.class.getName());
 	private Timeline timeline;
 	private UserInfo ui;
 	List<User> followers;

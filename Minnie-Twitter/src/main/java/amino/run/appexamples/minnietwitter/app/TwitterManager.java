@@ -13,7 +13,7 @@ import static amino.run.runtime.MicroService.delete_;
 import static amino.run.runtime.MicroService.new_;
 
 public class TwitterManager implements MicroService {
-	private static Logger logger = Logger.getLogger(TwitterManager.class.getName());
+	private static final Logger logger = Logger.getLogger(TwitterManager.class.getName());
 	private UserManager userManager;
 	private TagManager tagManager;
 	

@@ -2,10 +2,12 @@ package amino.run.appexamples.minnietwitter.app;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import amino.run.app.MicroService;
 
 public class Timeline implements MicroService {
+	private static final Logger logger = Logger.getLogger(Timeline.class.getName());
 	//private User user;
 	private String userName;
 
@@ -36,7 +38,7 @@ public class Timeline implements MicroService {
 		Tweet t = new Tweet(timelineStub, text, userName, currentId);
 		TweetContainer tc = new TweetContainer(t, tm);
 		tweets.add(0, tc);
-		System.out.println("Tweeted: " + text);
+		logger.info("User " + userName + " tweeted: " + text);
 		currentId += 1;
 	}
 

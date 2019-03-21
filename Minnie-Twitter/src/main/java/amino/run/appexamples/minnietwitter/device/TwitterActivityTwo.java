@@ -3,6 +3,7 @@ package amino.run.appexamples.minnietwitter.device;
 import java.net.InetSocketAddress;
 import java.rmi.registry.LocateRegistry;
 import java.util.List;
+import java.util.logging.Logger;
 
 import amino.run.app.Language;
 import amino.run.app.Registry;
@@ -20,6 +21,7 @@ import amino.run.kernel.server.KernelServerImpl;
 //TODO: Convert this into android application and make changes as per latest amino code and this is required as it
 // covers multi-user scenario.
 public class TwitterActivityTwo {
+    private static final Logger logger = Logger.getLogger(TwitterActivityTwo.class.getName());
     /**
      * To execute this application, please pass in three parameters: <OMS-IP> <OMS-Port> <KernelServer-Port>
      *
@@ -49,12 +51,12 @@ public class TwitterActivityTwo {
 
         MicroServiceSpec spec = MicroServiceSpec.newBuilder()
                 .setLang(Language.java)
-                .setJavaClassName("sapphire.appexamples.minnietwitter.app.TwitterManager")
+                .setJavaClassName("amino.run.appexamples.minnietwitter.app.TwitterManager")
                 .create();
 
-        MicroServiceID sapphireObjId = server.create(spec.toString());
-        TwitterManager tm = (TwitterManager)server.acquireStub(sapphireObjId);
-        System.out.println("Received Twitter Manager Stub: " + tm);
+        MicroServiceID microServiceID = server.create(spec.toString());
+        TwitterManager tm = (TwitterManager)server.acquireStub(microServiceID);
+        logger.info("Received Twitter Manager Stub: " + tm);
 
         UserManager userManger = tm.getUserManager();
         TagManager tagManager = tm.getTagManager();
@@ -72,13 +74,13 @@ public class TwitterActivityTwo {
         myTimeline.retweet(peerTweets.get(0));
 
         List<Tweet> myTweets = myTimeline.getTweets(0, 1);
-        System.out.println("My tweet:" + myTweets.get(0).getText());
+        logger.info("My tweet: " + myTweets.get(0).getText());
 
         tagManager.addTag("#goodlife", myTweets.get(0));
         List<Tweet> tweetsForTag = tagManager.getTweetsForTag("#goodlife", 0, 1);
-        System.out.println(tweetsForTag.get(0).getText());
+        logger.info("Tweet for tag #goodlife: " + tweetsForTag.get(0).getText());
 
-        System.out.println("Retweets: " + peerTimeline.getRetweets(peerTweets.get(0).getId(), 0, 1).get(0));
+        logger.info("Retweets: " + peerTimeline.getRetweets(peerTweets.get(0).getId(), 0, 1).get(0));
         System.exit(0);
     }
 }

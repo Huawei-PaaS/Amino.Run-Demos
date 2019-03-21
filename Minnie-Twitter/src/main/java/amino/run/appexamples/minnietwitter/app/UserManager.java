@@ -13,7 +13,7 @@ import amino.run.policy.dht.DHTKey;
 import static amino.run.runtime.MicroService.*;
 
 public class UserManager implements MicroService {
-	private static Logger logger = Logger.getLogger(UserManager.class.getName());
+	private static final Logger logger = Logger.getLogger(UserManager.class.getName());
 	Map<DHTKey, User> users;
 	private TagManager tm;
 
@@ -39,7 +39,6 @@ public class UserManager implements MicroService {
 		user.initialize(user);
 		users.put(new DHTKey(username), user);
 
-		System.out.println("Created user: " + username);
 		return user;
 	}
 

@@ -3,6 +3,7 @@ package amino.run.appexamples.minnietwitter.device;
 import java.net.InetSocketAddress;
 import java.rmi.registry.LocateRegistry;
 import java.util.List;
+import java.util.logging.Logger;
 
 import amino.run.appexamples.minnietwitter.app.TagManager;
 import amino.run.appexamples.minnietwitter.app.Timeline;
@@ -21,6 +22,7 @@ import amino.run.kernel.server.KernelServerImpl;
 //TODO: Convert this into android application and make changes as per latest amino code and this is required as it
 // covers retweeting scenario.
 public class TwitterActivityOne {
+    private static final Logger logger = Logger.getLogger(TwitterActivityOne.class.getName());
 
     /**
      * To execute this application, please pass in three parameters: <OMS-IP> <OMS-Port> <KernelServer-Port>
@@ -40,7 +42,6 @@ public class TwitterActivityOne {
         java.rmi.registry.Registry registry;
         registry = LocateRegistry.getRegistry(args[0], Integer.parseInt(args[1]));
         Registry server = (Registry) registry.lookup("io.amino.run.oms");
-        System.out.println("Connected to the OMS: " + server);
 
         // This kernel server is a fake kernel server. It is _not_ registered in OMS. Therefore
         // there will be no Sapphire object on this server. The purpose of creating such a fake
@@ -56,12 +57,12 @@ public class TwitterActivityOne {
 
         MicroServiceSpec spec = MicroServiceSpec.newBuilder()
                 .setLang(Language.java)
-                .setJavaClassName("sapphire.appexamples.minnietwitter.app.TwitterManager")
+                .setJavaClassName("amino.run.appexamples.minnietwitter.app.TwitterManager")
                 .create();
 
-        MicroServiceID sapphireObjId = server.create(spec.toString());
-        TwitterManager tm = (TwitterManager)server.acquireStub(sapphireObjId);
-        System.out.println("Received Twitter Manager Stub: " + tm);
+        MicroServiceID microServiceID = server.create(spec.toString());
+        TwitterManager tm = (TwitterManager)server.acquireStub(microServiceID);
+        logger.info("Received Twitter Manager Stub: " + tm);
 
         UserManager userManger = tm.getUserManager();
         userManger.addUser(userName, "pwd");
@@ -72,10 +73,10 @@ public class TwitterActivityOne {
         }
 
         List<Tweet> peerTweets = timeline.getTweets(0, tweetCnt);
-        System.out.println(String.format("User %s has %d tweets", userName, peerTweets.size()));
+        logger.info("User " + userName + " has " + peerTweets.size() + " tweets");
 
         for (Tweet t : peerTweets) {
-            System.out.println(String.format("==> Tweet: '%s'; number of retweets: %d; number of favorites: %d", t.getText(), t.getRetweetes(), t.getFavorites()));
+            logger.info("Tweet: '" + t.getText() +"'; number of retweets: " + t.getRetweetes() + "; number of favorites: " + t.getFavorites());
         }
         System.exit(0);
     }
