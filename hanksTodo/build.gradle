@@ -47,6 +47,13 @@ subprojects {
         def src = "$projectDir.parent/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/amino/run/appexamples/hankstodo/app/"
         def dst = "$projectDir.parent/src/main/java/amino/run/appexamples/hankstodo/app/stubs/"
         args src, pkgName, dst
+        outputs.dir dst
     }
 }
+
+/*build.finalizedBy(subprojects.compileHanksTodoStubs)
+
+clean {
+    delete subprojects.genHanksTodoStubs.outputs.files
+}*/
 

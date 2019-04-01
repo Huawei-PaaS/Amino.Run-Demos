@@ -49,6 +49,7 @@ subprojects {
         def src = "$projectDir.parent/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/engine/"
         def dst = "$projectDir.parent/src/main/java/engine/stubs/"
         args src, pkgName, dst
+        outputs.dir dst
     }
 
     genStubs {
@@ -60,3 +61,7 @@ subprojects {
     }
 }
 
+/*clean {
+    delete subprojects.genChessStubs.outputs.files
+    delete subprojects.genEngineStubs.outputs.files
+}*/
