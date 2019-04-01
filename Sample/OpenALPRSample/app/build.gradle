@@ -63,3 +63,37 @@ task createJar(type: Copy) {
 }
 
 //createJar.dependsOn(deleteJar, build)
+
+subprojects {
+    apply plugin: 'java-library'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        google()
+        maven { url  "https://dl.bintray.com/terryzhuo/DCAP" }
+    }
+
+    dependencies {
+        compile 'com.huawei.paas:sapphire-core:1.0.0'
+        compile 'com.github.pcj:google-options:1.0.0'
+        compile 'com.google.code.gson:gson:2.5'
+        compile 'org.yaml:snakeyaml:1.21'
+    }
+
+    task runoms(type: JavaExec) {
+        def projectOpenALPR = project(":OpenALPR").getProperties().getAt("buildDir")
+        classpath = sourceSets.main.runtimeClasspath + files("$projectOpenALPR/intermediates/classes/debug/")
+        main = 'amino.run.oms.OMSServerImpl'
+        args project.property('omsIpFlag'), project.property('omsIp'), project.property('omsPortFlag'), project.property('omsPort')
+    }
+
+    task runks(type: JavaExec) {
+        def projectOpenALPR = project(":OpenALPR").getProperties().getAt("buildDir")
+        classpath = sourceSets.main.runtimeClasspath + files("$projectOpenALPR/intermediates/classes/debug/")
+        main = 'amino.run.kernel.server.KernelServerImpl'
+        args project.property('kernelServerIpFlag'), project.property('kernelServerIp'), project.property('kernelServerPortFlag'), project.property('kernelServerPort'),
+                project.property('omsIpFlag'), project.property('omsIp'), project.property('omsPortFlag'), project.property('omsPort'), project.property('labelsFlag'),
+                project.property('regionFlag')+project.property('regionValue')
+    }
+}
