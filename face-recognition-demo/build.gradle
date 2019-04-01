@@ -10,16 +10,9 @@ dependencies {
     implementation 'com.amino-os.run:amino-run-core:1.0.0.RC6'
 }
 
-// Task for Stub compilation
-task compileRecogStub(type: JavaCompile) {
-    source = sourceSets.main.java.srcDirs
-    classpath = sourceSets.main.compileClasspath
-    destinationDir = sourceSets.main.output.classesDir
-    options.incremental = true
-}
-
 // Task for Stub generation
 task genRecogStub(type: JavaExec) {
+    mustRunAfter compileJava
     main = "amino.run.compiler.StubGenerator"
     classpath = sourceSets.main.runtimeClasspath
     def pkgName = 'facerecog'
@@ -28,8 +21,15 @@ task genRecogStub(type: JavaExec) {
     args src, pkgName, dst
 }
 
-genRecogStub.mustRunAfter compileJava
-compileRecogStub.dependsOn genRecogStub
+// Task for Stub compilation
+task compileRecogStub(type: JavaCompile) {
+    dependsOn genRecogStub
+    source = sourceSets.main.java.srcDirs
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = sourceSets.main.output.classesDir
+    options.incremental = true
+}
+
 jar.dependsOn compileRecogStub
 
 // Task for running the OMS
