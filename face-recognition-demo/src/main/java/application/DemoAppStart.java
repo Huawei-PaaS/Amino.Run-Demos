@@ -19,7 +19,7 @@ import java.rmi.registry.LocateRegistry;
 import java.util.logging.Logger;
 
 public class DemoAppStart {
-    private static Logger logger = Logger.getLogger(DemoAppStart.class.getName());
+    private static final Logger logger = Logger.getLogger(DemoAppStart.class.getName());
 
     public static void main(String[] args) throws IOException, InterruptedException {
         String frame, resp;
@@ -29,7 +29,8 @@ public class DemoAppStart {
         if ( sourceType.equalsIgnoreCase("camera") || sourceType.equalsIgnoreCase("video") ) {
             frameGenerator = new FrameGenerator(sourceType);
         } else {
-            logger.info("Incorrect source specified, use either \"camera\" or \"video\"");
+            logger.severe("Incorrect source specified, use either \"camera\" or \"video\"");
+            return;
         }
 
         try {
@@ -83,11 +84,11 @@ public class DemoAppStart {
                     }
                 }
                 else {
-                    logger.info("Incorrect input: please input oms_ip, oms_port, kernel_android_ip, " +
+                    logger.severe("Incorrect input: please input oms_ip, oms_port, kernel_android_ip, " +
                             "kernel_server_port, detection/tracking, camera/video, display/file");
                 }
             } else {
-                logger.info("Incorrect input: please input oms_ip, oms_port, kernel_android_ip, " +
+                logger.severe("Incorrect input: please input oms_ip, oms_port, kernel_android_ip, " +
                         "kernel_server_port, detection/tracking, camera/video, display/file");
             }
         }
