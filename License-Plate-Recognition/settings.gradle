@@ -1,0 +1,2 @@
+include ':openALPR'
+include ':openALPR:subprojects'

@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.view.KeyEvent;
@@ -352,7 +353,8 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("outputX", 1280);
             intent.putExtra("outputY", 720);
             intent.putExtra("scale", true);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destination));
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(MainActivity.this, getApplicationContext().getPackageName() + ".fileprovider", destination));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivityForResult(intent, REQUEST_IMAGE);
         }
     }

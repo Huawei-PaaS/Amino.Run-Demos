@@ -4,19 +4,19 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.SandroMachado'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.2"
 
     defaultConfig {
-        minSdkVersion 22
-        targetSdkVersion 23
+        minSdkVersion 24
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0.1"
     }
     buildTypes {
         release {
             minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -27,7 +27,7 @@ android {
 
 repositories {
     mavenCentral()
-    maven { url  "https://dl.bintray.com/terryzhuo/DCAP" }
+    maven { url "https://dl.bintray.com/terryzhuo/DCAP" }
 }
 
 dependencies {
@@ -35,19 +35,6 @@ dependencies {
     compile 'com.huawei.paas:sapphire-core:1.0.0'
     compile 'com.google.code.gson:gson:2.5'
 }
-//
-//task deleteJar(type: Delete) {
-//    delete 'libs/openalpr.jar'
-//}
-
-task createJar(type: Copy) {
-    from('build/intermediates/bundles/debug/')
-//    into('libs/jars/')
-    include('classes.jar')
-    rename('classes.jar', 'openalpr.jar')
-}
-
-//createJar.dependsOn(deleteJar, build)
 
 subprojects {
     apply plugin: 'java-library'
@@ -61,12 +48,13 @@ subprojects {
         compile 'com.huawei.paas:sapphire-core:1.0.0'
         compile 'com.google.code.gson:gson:2.5'
         compile 'com.google.android:android:4.0.1.2'
+        compile files("$project.parent.buildDir/intermediates/classes/debug/")
     }
 
     // Task for Stub generation
     task genStubs(type: JavaExec) {
         main = "amino.run.compiler.StubGenerator"
-        classpath = sourceSets.main.runtimeClasspath + files("$project.parent.buildDir/intermediates/classes/debug/")
+        classpath = sourceSets.main.runtimeClasspath
         def pkgName = 'org.openalpr'
         def src = "$projectDir.parent/build/intermediates/classes/debug/org/openalpr/"
         def dst = "$projectDir.parent/src/main/java/org/openalpr/stubs/"
@@ -78,7 +66,7 @@ subprojects {
     task compileStubsDebug(type: JavaCompile) {
         source = files("$projectDir.parent/src/main/java")
         destinationDir = file("$project.parent.buildDir/intermediates/classes/debug/")
-        classpath = sourceSets.main.runtimeClasspath + files("$project.parent.buildDir/intermediates/classes/debug/")
+        classpath = sourceSets.main.runtimeClasspath
         options.incremental = true
       }
 
@@ -86,8 +74,24 @@ subprojects {
     task compileStubsRelease(type: JavaCompile) {
         source = files("$projectDir.parent/src/main/java")
         destinationDir = file("$project.parent.buildDir/intermediates/classes/release/")
-        classpath = sourceSets.main.runtimeClasspath + files("$project.parent.buildDir/intermediates/classes/release/")
+        classpath = sourceSets.main.runtimeClasspath
         options.incremental = true
+    }
+
+    task runoms(type: JavaExec) {
+        def projectOpenALPR = project(":openALPR").getProperties().getAt("buildDir")
+        classpath = sourceSets.main.runtimeClasspath + files("$projectOpenALPR/intermediates/classes/debug/")
+        main = 'amino.run.oms.OMSServerImpl'
+        args project.property('omsIpFlag'), project.property('omsIp'), project.property('omsPortFlag'), project.property('omsPort')
+    }
+
+    task runks(type: JavaExec) {
+        def projectOpenALPR = project(":openALPR").getProperties().getAt("buildDir")
+        classpath = sourceSets.main.runtimeClasspath + files("$projectOpenALPR/intermediates/classes/debug/")
+        main = 'amino.run.kernel.server.KernelServerImpl'
+        args project.property('kernelServerIpFlag'), project.property('kernelServerIp'), project.property('kernelServerPortFlag'), project.property('kernelServerPort'),
+                project.property('omsIpFlag'), project.property('omsIp'), project.property('omsPortFlag'), project.property('omsPort'), project.property('labelsFlag'),
+                project.property('regionFlag')+project.property('regionValue')
     }
 
     compileStubsDebug.dependsOn genStubs
