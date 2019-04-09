@@ -1,4 +1,4 @@
-package org.openalpr;
+package com.openalpr.jni;
 
 import java.io.File;
 import java.net.InetSocketAddress;

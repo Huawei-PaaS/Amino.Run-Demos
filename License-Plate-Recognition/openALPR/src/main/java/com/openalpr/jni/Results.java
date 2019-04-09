@@ -1,6 +1,6 @@
-package org.openalpr;
+package com.openalpr.jni;
 
-import org.openalpr.model.Result;
+import com.openalpr.jni.model.Result;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,3 +1,3 @@
 *.iml
 /build
-/src/main/java/org/openalpr/stubs/
+/src/main/java/com/openalpr/jni/stubs/

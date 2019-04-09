@@ -1,8 +1,10 @@
-package org.openalpr;
+package com.openalpr.jni;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.InetSocketAddress;
 import java.rmi.registry.LocateRegistry;
+import java.util.logging.Logger;
 
 import amino.run.app.DMSpec;
 import amino.run.app.Registry;
@@ -10,6 +12,7 @@ import amino.run.app.Registry;
 import amino.run.app.Language;
 import amino.run.app.MicroServiceSpec;
 import amino.run.common.MicroServiceID;
+import amino.run.kernel.server.KernelServer;
 import amino.run.kernel.server.KernelServerImpl;
 import amino.run.oms.OMSServerImpl;
 import amino.run.policy.mobility.explicitmigration.ExplicitMigrationPolicy;
@@ -17,6 +20,7 @@ import amino.run.policy.mobility.explicitmigration.ExplicitMigrationPolicy;
 
 public class MicroServiceAccess
 {
+    private static final Logger logger = Logger.getLogger(MicroServiceAccess.class.getName());
     public AlprMicroService lr;
     public static long fileUploadTime; // file upload time.
     public static long processingTime; // image recognition processing time.
@@ -66,6 +70,8 @@ public class MicroServiceAccess
                 registry = LocateRegistry.getRegistry(Configuration.natOmsAddress[0], Integer.parseInt(Configuration.natOmsAddress[1]));
                 Registry server = (Registry) registry.lookup("io.amino.run.oms");
 
+                KernelServer nodeServer = new KernelServerImpl(new InetSocketAddress(Configuration.natDeviceKernelAddress[0], Integer.parseInt(Configuration.natDeviceKernelAddress[1])), new InetSocketAddress(Configuration.natOmsAddress[0], Integer.parseInt(Configuration.natOmsAddress[1])));
+
                 MicroServiceSpec spec =
                         MicroServiceSpec.newBuilder()
                                 .setLang(Language.java)
@@ -88,7 +94,10 @@ public class MicroServiceAccess
             if (processEntity == Configuration.ProcessEntity.SERVER) {
                 lr.migrateTo(Configuration.getNatServerKernelAddress());
             } else {
-                lr.migrateTo(Configuration.getNatDeviceKernelAddress());
+                //TODO: Will be enabled once running on the device is supported
+                //lr.migrateTo(Configuration.getNatDeviceKernelAddress());
+                logger.warning("Currently device is not supported. Please select SERVER");
+                return null;
             }
         }
 
@@ -97,7 +106,11 @@ public class MicroServiceAccess
 
             String openAlprConfFile = ANDROID_DATA_DIR + File.separatorChar + "runtime_data" + File.separatorChar + "openalpr.conf";
 
-            if (processEntity == Configuration.ProcessEntity.SERVER) {
+            //TODO: Running on the device should be supported
+            if(processEntity == Configuration.ProcessEntity.DEVICE) {
+                logger.warning("Currently device is not supported. Please select SERVER");
+                return null;
+            } else {
                 fileUploadTime = UploadFileToServer(file);
                 if (fileUploadTime == -1) {
                     System.out.println("File upload failed for " + imageFilePath);

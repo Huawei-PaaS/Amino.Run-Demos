@@ -1,4 +1,4 @@
-package org.openalpr.util;
+package com.openalpr.jni.util;
 
 import android.content.res.AssetManager;
 

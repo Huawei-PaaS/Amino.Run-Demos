@@ -53,11 +53,15 @@ subprojects {
 
     // Task for Stub generation
     task genStubs(type: JavaExec) {
+        def folder = new File("$projectDir.parent/subprojects")
+        if(!folder.exists()){
+            folder.mkdir();
+        }
         main = "amino.run.compiler.StubGenerator"
         classpath = sourceSets.main.runtimeClasspath
-        def pkgName = 'org.openalpr'
-        def src = "$projectDir.parent/build/intermediates/classes/debug/org/openalpr/"
-        def dst = "$projectDir.parent/src/main/java/org/openalpr/stubs/"
+        def pkgName = 'com.openalpr.jni'
+        def src = "$projectDir.parent/build/intermediates/classes/debug/com/openalpr/jni"
+        def dst = "$projectDir.parent/src/main/java/com/openalpr/jni/stubs/"
         args src, pkgName, dst
         outputs.dir dst
     }

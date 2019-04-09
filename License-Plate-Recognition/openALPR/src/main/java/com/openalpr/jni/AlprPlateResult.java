@@ -1,9 +1,9 @@
-package org.openalpr;
+package com.openalpr.jni;
 
 
-import org.openalpr.json.JSONArray;
-import org.openalpr.json.JSONException;
-import org.openalpr.json.JSONObject;
+import com.openalpr.jni.json.JSONArray;
+import com.openalpr.jni.json.JSONException;
+import com.openalpr.jni.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;

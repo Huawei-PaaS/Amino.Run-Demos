@@ -1,20 +1,21 @@
-package org.openalpr;
+package com.openalpr.jni;
 
-import org.openalpr.json.JSONException;
+import com.openalpr.jni.json.JSONException;
 
 import java.io.File;
 
-import org.openalpr.Configuration;
+import com.openalpr.jni.Configuration;
 
 /**
  * This Class loads Alpr for license plate recognition on a default machine (e.g., Linux/Windows).
  * It works both for Android and server machines but these two entities use different underlying C++ code.
  */
-public class AlprJNIWrapper {
+public class Alpr {
     static {
         try {
             System.out.println("Loading library.");
-            System.loadLibrary("openalpr-native");
+            String cwd = System.getProperty("user.dir");
+            System.load(cwd + "/../src/main/jniLibs/armeabi-v7a/libopenalprjni.so");
             System.out.println("Loaded library.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,7 +41,7 @@ public class AlprJNIWrapper {
     public native String recognizeWithCountryRegionNConfig(String country,
                                                            String region, String imgFilePath, String configFilePath, int topN);
 
-    public AlprJNIWrapper() {}
+    public Alpr() {}
 
     public void unload()
     {

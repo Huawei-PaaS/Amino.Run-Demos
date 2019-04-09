@@ -1,4 +1,4 @@
-package org.openalpr;
+package com.openalpr.jni;
 
 import java.io.RandomAccessFile;
 import java.io.File;
@@ -12,7 +12,7 @@ public class Main {
 
     private void execOnDefault(String fileName) {
 
-        AlprJNIWrapper alpr = new AlprJNIWrapper();
+        Alpr alpr = new Alpr();
 
         alpr.setTopN(50);
         alpr.setDefaultRegion("");

@@ -1,4 +1,4 @@
-package org.openalpr.model;
+package com.openalpr.jni.model;
 
 import java.io.Serializable;
 import java.util.List;

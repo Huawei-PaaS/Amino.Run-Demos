@@ -2,10 +2,10 @@ package com.sandro.openalprsample;
 
 import android.os.AsyncTask;
 
-import org.openalpr.MicroServiceAccess;
-import org.openalpr.Results;
+import com.openalpr.jni.MicroServiceAccess;
+import com.openalpr.jni.Results;
 
-import org.openalpr.Configuration;
+import com.openalpr.jni.Configuration;
 /**
  * Created by SMoon on 2/27/2018.
  */

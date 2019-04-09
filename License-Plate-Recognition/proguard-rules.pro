@@ -16,4 +16,4 @@
 #   public *;
 #}
 
--keep class org.openalpr.model.** { *; }
+-keep class com.openalpr.jni.model.** { *; }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.openalpr.json;
+package com.openalpr.jni.json;
 
 // Note: this class was written without inspecting the non-free org.json sourcecode.
 

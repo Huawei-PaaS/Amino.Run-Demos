@@ -1,8 +1,8 @@
-package org.openalpr;
+package com.openalpr.jni;
 
 import java.net.InetSocketAddress;
 
-import static org.openalpr.Configuration.ProcessEntity.SERVER;
+import static com.openalpr.jni.Configuration.ProcessEntity.SERVER;
 
 /**
  * Created by SMoon on 2/27/2018.

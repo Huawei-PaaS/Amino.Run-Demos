@@ -1,10 +1,10 @@
-package org.openalpr;
+package com.openalpr.jni;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-import org.openalpr.model.Result;
-import org.openalpr.model.ResultsError;
+import com.openalpr.jni.model.Result;
+import com.openalpr.jni.model.ResultsError;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -73,11 +73,11 @@ public class AlprMicroService implements MicroService, ExplicitMigrator {
             int MAX_NUM_OF_PLATES,
             Configuration.ProcessEntity processEntity) {
 
-        AlprJNIWrapper alpr;
+        Alpr alpr;
         String resultJson;
 
         try {
-            alpr = new AlprJNIWrapper();
+            alpr = new Alpr();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e);
