@@ -22,7 +22,7 @@
             android:label="@string/register" >
         </activity>
         <activity
-            android:name="amino.run.appexamples.minnietwitter.glue.HomeActivity">
+            android:name="amino.run.appexamples.minnietwitter.glue.HomeActivity"
             android:label="@string/app_name">
         </activity>
         <activity

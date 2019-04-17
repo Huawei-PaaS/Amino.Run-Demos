@@ -17,6 +17,5 @@
 		<activity android:name=".CopyrightActivity" android:screenOrientation="portrait"></activity>
 		<activity android:name=".GNUActivity" android:screenOrientation="portrait"></activity>
     </application>
-    <uses-sdk android:minSdkVersion="7" />
 
 </manifest>

@@ -12,14 +12,14 @@ buildscript {
          * https://issuetracker.google.com/issues/38454212
          * https://github.com/requery/requery/issues/467
          */
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.3.1'
     }
 }
 
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion = 27
-    buildToolsVersion = "27.0.2"
+    compileSdkVersion = 28
+    buildToolsVersion = "28.0.3"
 
     lintOptions {
         checkReleaseBuilds false
@@ -32,8 +32,8 @@ android {
         applicationId "com.example.hankstodo"
         versionCode 1
         versionName "1.0"
-        minSdkVersion 24
-        targetSdkVersion 27
+        minSdkVersion 26
+        targetSdkVersion 28
     }
 
     buildTypes {
@@ -47,17 +47,22 @@ android {
         preDexLibraries = false
         additionalParameters = ["--core-library"]
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 repositories {
     jcenter()
     google()
-    maven { url  "https://dl.bintray.com/terryzhuo/DCAP" }
+    maven { url  "https://dl.bintray.com/terryzhuo/Amino" }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:27.0.2'
-    compile 'com.huawei.paas:sapphire-core:1.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.amino-os.run:amino-run-core:1.0.0.RC6'
 }
 
 subprojects {
@@ -66,15 +71,15 @@ subprojects {
     repositories {
         jcenter()
         google()
-        maven { url  "https://dl.bintray.com/terryzhuo/DCAP" }
+        maven { url  "https://dl.bintray.com/terryzhuo/Amino" }
     }
 
     dependencies {
-        compile 'com.huawei.paas:sapphire-core:1.0.0'
+        implementation 'com.amino-os.run:amino-run-core:1.0.0.RC6'
     }
 
     task copyClasses(type: Copy) {
-        from "$projectDir.parent/build/intermediates/classes/debug/"
+        from "$projectDir.parent/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/"
         into 'build/classes/java/main/'
     }
 
@@ -91,7 +96,7 @@ subprojects {
         main = "amino.run.compiler.StubGenerator"
         classpath = sourceSets.main.runtimeClasspath
         def pkgName = 'amino.run.appexamples.hankstodo.app'
-        def src = "$projectDir.parent/build/intermediates/classes/debug/amino/run/appexamples/hankstodo/app/"
+        def src = "$projectDir.parent/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/amino/run/appexamples/hankstodo/app/"
         def dst = "$projectDir.parent/src/main/java/amino/run/appexamples/hankstodo/app/stubs/"
         args src, pkgName, dst
     }
