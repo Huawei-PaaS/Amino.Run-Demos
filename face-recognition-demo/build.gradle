@@ -3,13 +3,11 @@ apply plugin: 'java-library'
 repositories {
     jcenter()
     google()
-    maven { url  "https://dl.bintray.com/terryzhuo/DCAP" }
+    maven { url  "https://dl.bintray.com/terryzhuo/Amino" }
 }
 
 dependencies {
-    implementation 'com.huawei.paas:sapphire-core:1.0.0'
-    implementation 'com.huawei.paas:java.rmi:1.0.0'
-    implementation 'com.huawei.paas:apache.harmony:1.0.0'
+    implementation 'com.amino-os.run:amino-run-core:1.0.0.RC6'
 }
 
 // Task for Stub compilation
