@@ -79,11 +79,9 @@ public class MainActivity extends AppCompatActivity {
         if (sa == null) {
             sa = new MicroServiceAccess();
         }
-
-        //TODO: This will be enabled once running the app on the device is made successful
         // Below is to execute kernel server on the device.
         // Android limits network call to async operation in Main activity.
-        //new OpenAlprMicroServiceInit(sa).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new OpenAlprMicroServiceInit(sa).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         Utils.copyAssetFolder(MainActivity.this.getAssets(), "runtime_data", ANDROID_DATA_DIR + File.separatorChar + "runtime_data");
         infoTextView.setText(infoTextStr);

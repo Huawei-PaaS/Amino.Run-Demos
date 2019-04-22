@@ -43,7 +43,9 @@ public class MicroServiceAccess
             };
 
             // Launch local Microservice kernel server.
-            KernelServerImpl.main(kernelArgs);
+            //TODO: Once running on device works, this can be replaced with
+            // KernelServerImpl.main(kernelArgs);
+            KernelServer nodeServer = new KernelServerImpl(new InetSocketAddress(kernelArgs[1], Integer.parseInt(kernelArgs[3])), new InetSocketAddress(kernelArgs[5], Integer.parseInt(kernelArgs[7])));
         }
         catch (Exception e) {
             // TODO Auto-generated catch block
@@ -64,13 +66,17 @@ public class MicroServiceAccess
     public Results getResult(String ANDROID_DATA_DIR, String countryCode, String region, String imageFilePath, Configuration.ProcessEntity processEntity) {
         Results results = null;
 
+        //TODO: Running on the device should be supported
+        if(processEntity == Configuration.ProcessEntity.DEVICE) {
+            logger.warning("Currently device is not supported. Please select SERVER");
+            return null;
+        }
+
         if (previousEntity == Configuration.ProcessEntity.UNDECIDED || lr == null) {
             try {
                 java.rmi.registry.Registry registry;
                 registry = LocateRegistry.getRegistry(Configuration.natOmsAddress[0], Integer.parseInt(Configuration.natOmsAddress[1]));
                 Registry server = (Registry) registry.lookup("io.amino.run.oms");
-
-                KernelServer nodeServer = new KernelServerImpl(new InetSocketAddress(Configuration.natDeviceKernelAddress[0], Integer.parseInt(Configuration.natDeviceKernelAddress[1])), new InetSocketAddress(Configuration.natOmsAddress[0], Integer.parseInt(Configuration.natOmsAddress[1])));
 
                 MicroServiceSpec spec =
                         MicroServiceSpec.newBuilder()
@@ -94,10 +100,7 @@ public class MicroServiceAccess
             if (processEntity == Configuration.ProcessEntity.SERVER) {
                 lr.migrateTo(Configuration.getNatServerKernelAddress());
             } else {
-                //TODO: Will be enabled once running on the device is supported
-                //lr.migrateTo(Configuration.getNatDeviceKernelAddress());
-                logger.warning("Currently device is not supported. Please select SERVER");
-                return null;
+                lr.migrateTo(Configuration.getNatDeviceKernelAddress());
             }
         }
 
@@ -106,11 +109,7 @@ public class MicroServiceAccess
 
             String openAlprConfFile = ANDROID_DATA_DIR + File.separatorChar + "runtime_data" + File.separatorChar + "openalpr.conf";
 
-            //TODO: Running on the device should be supported
-            if(processEntity == Configuration.ProcessEntity.DEVICE) {
-                logger.warning("Currently device is not supported. Please select SERVER");
-                return null;
-            } else {
+            if (processEntity == Configuration.ProcessEntity.SERVER) {
                 fileUploadTime = UploadFileToServer(file);
                 if (fileUploadTime == -1) {
                     System.out.println("File upload failed for " + imageFilePath);
