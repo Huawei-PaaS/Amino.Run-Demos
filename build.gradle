@@ -31,27 +31,23 @@ subprojects {
 
         dependencies {
             implementation 'com.amino-os.run:amino-run-core:1.0.0.RC6'
-        }
-
-        task copyClasses(type: Copy) {
-            from "$projectDir.parent/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/"
-            into 'build/classes/java/main/'
+            implementation 'com.google.android:android:4.0.1.2'
+            implementation files("$project.parent.buildDir/intermediates/javac/debug/compileDebugJavaWithJavac/classes/")
         }
 
         // Task for Stub generation
         task genStubs(type: JavaExec) {
             classpath = sourceSets.main.runtimeClasspath
             mustRunAfter compileJava
-            dependsOn copyClasses
             main = "amino.run.compiler.StubGenerator"
         }
 
         // Task for Stub compilation
         task compileStubs(type: JavaCompile) {
             dependsOn genStubs
-            source = sourceSets.main.java.srcDirs
-            classpath = sourceSets.main.compileClasspath
-            destinationDir = sourceSets.main.output.classesDir
+            source = files("$projectDir.parent/src/main/java")
+            classpath = sourceSets.main.runtimeClasspath
+            destinationDir = file("$project.parent.buildDir/intermediates/javac/debug/compileDebugJavaWithJavac/classes/")
             options.incremental = true
         }
         jar.dependsOn compileStubs
@@ -79,6 +75,10 @@ subprojects {
             configure common
             main = 'amino.run.kernel.server.KernelServerImpl'
             args project.property('kernelServerIpFlag'), project.property('kernelServer2Ip'), project.property('kernelServerPortFlag'), project.property('kernelServer2Port')
+        }
+
+        clean {
+            delete genStubs.outputs.files
         }
     }
 }

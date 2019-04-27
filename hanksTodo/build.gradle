@@ -51,9 +51,3 @@ subprojects {
     }
 }
 
-/*build.finalizedBy(subprojects.compileHanksTodoStubs)
-
-clean {
-    delete subprojects.genHanksTodoStubs.outputs.files
-}*/
-

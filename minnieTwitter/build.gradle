@@ -199,7 +199,3 @@ subprojects {
     }
 }
 
-/*clean {
-    delete subprojects.genMinnieTwitterStubs.outputs.files
-}*/
-

@@ -58,10 +58,10 @@ subprojects {
         def src = "$projectDir.parent/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/chessmanager/"
         def dst = "$projectDir.parent/src/main/java/chessmanager/stubs/"
         args src, pkgName, dst
+        outputs.dir dst
     }
 }
 
-/*clean {
-    delete subprojects.genChessStubs.outputs.files
+clean {
     delete subprojects.genEngineStubs.outputs.files
-}*/
+}
