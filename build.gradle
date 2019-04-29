@@ -31,7 +31,13 @@ subprojects {
 
         dependencies {
             implementation 'com.amino-os.run:amino-run-core:1.0.0.RC6'
-            implementation 'com.google.android:android:4.0.1.2'
+            /**
+             * In android build tools version 3.3.1, the .class files are placed under "build/intermediates/javac/debug/compileDebugJavaWithJavac/classes"
+             * using which stub files for the Amino microService is generated.
+             * Additionally including the below implementation, makes these .class files accessible at the subprojects level where the task for generating
+             * stubs is defined.
+             * In future as and when the android build tools version is updated, the below classpath may need to be updated accordingly.
+             */
             implementation files("$project.parent.buildDir/intermediates/javac/debug/compileDebugJavaWithJavac/classes/")
         }
 
@@ -45,10 +51,11 @@ subprojects {
         // Task for Stub compilation
         task compileStubs(type: JavaCompile) {
             dependsOn genStubs
-            source = files("$projectDir.parent/src/main/java")
-            classpath = sourceSets.main.runtimeClasspath
-            destinationDir = file("$project.parent.buildDir/intermediates/javac/debug/compileDebugJavaWithJavac/classes/")
+            source = genStubs.outputs
+            classpath = sourceSets.main.compileClasspath
+            destinationDir = sourceSets.main.output.classesDir
             options.incremental = true
+            outputs.dir destinationDir
         }
         jar.dependsOn compileStubs
 
