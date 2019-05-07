@@ -1,0 +1,107 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        minSdkVersion 24
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0.1"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+repositories {
+    jcenter()
+    google()
+    mavenCentral()
+    maven { url  "https://dl.bintray.com/terryzhuo/Amino" }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.amino-os.run:amino-run-core:1.0.0.RC6'
+    implementation 'com.google.code.gson:gson:2.5'
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    repositories {
+        jcenter()
+        google()
+        maven { url  "https://dl.bintray.com/terryzhuo/Amino" }
+    }
+
+    dependencies {
+        implementation 'com.amino-os.run:amino-run-core:1.0.0.RC6'
+        implementation 'com.google.code.gson:gson:2.5'
+        implementation 'com.google.android:android:4.0.1.2'
+        implementation files("$project.parent.buildDir/intermediates/javac/debug/compileDebugJavaWithJavac/classes/")
+    }
+
+    // Task for Stub generation
+    task genStubs(type: JavaExec) {
+        def folder = new File("$projectDir.parent/subprojects")
+        if(!folder.exists()){
+            folder.mkdir();
+        }
+        main = "amino.run.compiler.StubGenerator"
+        classpath = sourceSets.main.runtimeClasspath
+        def pkgName = 'com.openalpr.jni'
+        def src = "$projectDir.parent/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/com/openalpr/jni/"
+        def dst = "$projectDir.parent/src/main/java/com/openalpr/jni/stubs/"
+        args src, pkgName, dst
+        outputs.dir dst
+    }
+
+    // Task for Stub compilation
+    task compileStubsDebug(type: JavaCompile) {
+        dependsOn genStubs
+        source = files("$projectDir.parent/src/main/java")
+        destinationDir = file("$project.parent.buildDir/intermediates/javac/debug/compileDebugJavaWithJavac/classes/")
+        classpath = sourceSets.main.runtimeClasspath
+        options.incremental = true
+      }
+
+    // Task for Stub compilation
+    task compileStubsRelease(type: JavaCompile) {
+        dependsOn compileStubsDebug
+        source = files("$projectDir.parent/src/main/java")
+        destinationDir = file("$project.parent.buildDir/intermediates/javac/release/compileReleaseJavaWithJavac/classes/")
+        classpath = sourceSets.main.runtimeClasspath
+        options.incremental = true
+    }
+
+    task runoms(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'amino.run.oms.OMSServerImpl'
+        args project.property('omsIpFlag'), project.property('omsIp'), project.property('omsPortFlag'), project.property('omsPort')
+    }
+
+    task runks(type: JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        main = 'amino.run.kernel.server.KernelServerImpl'
+        args project.property('kernelServerIpFlag'), project.property('kernelServerIp'), project.property('kernelServerPortFlag'), project.property('kernelServerPort'),
+                project.property('omsIpFlag'), project.property('omsIp'), project.property('omsPortFlag'), project.property('omsPort'), project.property('labelsFlag'),
+                project.property('regionFlag')+project.property('regionValue')
+    }
+}
+build.finalizedBy(subprojects.compileStubsRelease)
+
+clean {
+    delete subprojects.genStubs.outputs.files
+}

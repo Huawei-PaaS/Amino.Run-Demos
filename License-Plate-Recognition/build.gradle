@@ -1,0 +1,76 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
+    defaultConfig {
+        applicationId "com.sandro.openalprsample"
+        minSdkVersion 26
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.1.2"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dexOptions {
+        preDexLibraries = false
+        additionalParameters = ["--core-library"]
+    }
+
+    lintOptions{
+        disable 'MissingTranslation'
+        abortOnError false
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a', 'x86_64'
+            universalApk true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    google()
+    maven { url  "https://dl.bintray.com/terryzhuo/Amino" }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':openALPR')
+    implementation 'com.amino-os.run:amino-run-core:1.0.0.RC6'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+}

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">OpenALPRSample</string>
+    <string name="set_to_process_on">Set to process on   </string>
+</resources>

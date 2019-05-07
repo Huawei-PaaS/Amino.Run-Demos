@@ -1,0 +1,12 @@
+# Gradle files
+.gradle/
+build/
+
+# Log Files
+*.log
+
+# Android Studio / IntelliJ IDEA
+*.iws
+.idea/
+*.iml
+local.properties
