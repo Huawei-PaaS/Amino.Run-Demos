@@ -18,7 +18,7 @@ public class Tracking  {
         // String home = System.getProperty("user.home");
         // String cmd = home + "/.virtualenvs/cv/bin/python";
         String cmd = "/usr/local/bin/python";
-        String path = cwd + "/src/main/java/facerecog/";
+        String path = cwd + "/src/main/python/";
 
         // String outputType = "display"; // "display": for screen, "file": write to file
 

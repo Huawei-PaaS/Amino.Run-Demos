@@ -12,7 +12,7 @@ public class FrameGenerator {
         // String home = System.getProperty("user.home");
         // String cmd = home + "/.virtualenvs/cv/bin/python";
         String cmd = "/usr/local/bin/python";
-        String path = cwd + "/src/main/java/facerecog/";
+        String path = cwd + "/src/main/python/";
 
         ProcessBuilder ps1 = new ProcessBuilder(cmd, path + "frame_generator.py", sourceType);
         ps1.redirectErrorStream(true);
