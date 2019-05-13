@@ -46,7 +46,7 @@ public class TodoActivity {
 		TodoList tl = null;
 		try {
 			tl = tlm.newTodoList(id);
-			// Consensus policy needs some time after creating new Sapphire object; otherwise,
+			// Consensus policy needs some time after creating new microservice; otherwise,
 			// leader election may fail.
 			sleep(7000);
 		} catch (Exception e) {

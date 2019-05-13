@@ -32,7 +32,7 @@ public class SimpleEngine implements ChessEngine, MicroService, ExplicitMigrator
 	private boolean computerIsWhite;
 	private int ply;
 
-	// Moved the following members to private as Sapphire Object does not allow to have public member variables
+	// Moved the following members to private as microservice does not allow to have public member variables
 	//public final static int MATE = 50000;
 	//public final static int INF = 100000;
 	private final static int MATE = 50000;

@@ -69,5 +69,5 @@ Session.vim
 /.config/gcloud*/
 /.gsutil/
 
-# Sapphire stub files
+# Amino Run stub files
 **/stubs/**

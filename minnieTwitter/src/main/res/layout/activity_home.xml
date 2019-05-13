@@ -7,7 +7,7 @@
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
     android:paddingTop="15dp"
-    tools:context="sapphire.appexamples.minnietwitter.glue.HomeActivity">
+    tools:context="amino.run.appexamples.minnietwitter.glue.HomeActivity">
 
     <EditText
         android:id="@+id/tweetBody"

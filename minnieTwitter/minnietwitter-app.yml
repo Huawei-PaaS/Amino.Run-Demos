@@ -20,5 +20,5 @@ spec:
         ports:
         - containerPort: 22345
         command: ["/root/dcap/start-app.sh"]
-        args: ["sapphire.appexamples.minnietwitter.device.generator.TwitterWorldGenerator", "oms-minnietwitter-svc", "22346"]
+        args: ["amino.run.appexamples.minnietwitter.device.generator.TwitterWorldGenerator", "oms-minnietwitter-svc", "22346"]
 

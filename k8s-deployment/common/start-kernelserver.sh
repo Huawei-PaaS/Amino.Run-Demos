@@ -26,4 +26,4 @@ if [ -z $OMS_IP ]; then
 fi
 
 echo "Starting KernelServer on $KERNELSERVER_IP:$KERNELSERVER_PORT, connecting to $OMS_SERVICE at $OMS_IP:$OMS_PORT .."
-java -cp "/root/dcap/jars/*" -Djava.rmi.server.useCodebaseOnly=false -Djava.security.policy=/dcap/client.policy sapphire.kernel.server.KernelServerImpl $KERNELSERVER_IP $KERNELSERVER_PORT $OMS_IP $OMS_PORT
+java -cp "/root/dcap/jars/*" -Djava.rmi.server.useCodebaseOnly=false -Djava.security.policy=/dcap/client.policy amino.run.kernel.server.KernelServerImpl $KERNELSERVER_IP $KERNELSERVER_PORT $OMS_IP $OMS_PORT

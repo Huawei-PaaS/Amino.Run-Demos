@@ -44,7 +44,7 @@ public class TwitterActivityOne {
         Registry server = (Registry) registry.lookup("io.amino.run.oms");
 
         // This kernel server is a fake kernel server. It is _not_ registered in OMS. Therefore
-        // there will be no Sapphire object on this server. The purpose of creating such a fake
+        // there will be no microservice on this server. The purpose of creating such a fake
         // kernel server is to construct a KernelClient (inside the KernelServer object) and to
         // configure GlobalKernelReferences.nodeServer properly.
         //

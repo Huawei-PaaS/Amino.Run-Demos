@@ -18,4 +18,4 @@ if [ -z $OMS_IP ]; then
 fi
 
 echo "Starting OMS for app $OMS_APP_MAIN_CLASS, listening on $OMS_IP:$OMS_PORT .."
-java -cp "/root/dcap/jars/*" sapphire.oms.OMSServerImpl $OMS_IP $OMS_PORT $OMS_APP_MAIN_CLASS
+java -cp "/root/dcap/jars/*" amino.run.oms.OMSServerImpl $OMS_IP $OMS_PORT $OMS_APP_MAIN_CLASS
