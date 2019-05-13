@@ -15,9 +15,9 @@ public class Tracking  {
     public Tracking(Recognition recog, String targetType) {
         /* targetType =  "display": for screen, "file": write to file */
         String cwd = System.getProperty("user.dir");
-        // String home = System.getProperty("user.home");
-        // String cmd = home + "/.virtualenvs/cv/bin/python";
-        String cmd = "/usr/local/bin/python";
+        String home = System.getProperty("user.home");
+        String cmd = home + "/.virtualenvs/cv/bin/python3";
+        //String cmd = "/usr/local/bin/python";
         String path = cwd + "/src/main/python/";
 
         // String outputType = "display"; // "display": for screen, "file": write to file

@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+/**
+ * Class test face detection locally by forking "detection.py" process.
+ */
 public class Detection {
     private OutputStream out2;
     private BufferedReader in2;
@@ -12,13 +15,12 @@ public class Detection {
     public Detection(String targetType) {
         /* targetType = "display": for screen, "file": write to file */
         String cwd = System.getProperty("user.dir");
-        // String home = System.getProperty("user.home");
-        // String cmd = home + "/.virtualenvs/cv/bin/python";
-        String cmd = "/usr/local/bin/python";
+        String home = System.getProperty("user.home");
+        String cmd = home + "/.virtualenvs/cv/bin/python"; // if deployed on host system with opencv installed
+        //String cmd = "/usr/local/bin/python"; // if deployed in container
         String path = cwd + "/src/main/python/";
 
-        // String outputType = "display"; // "display": for screen, "file": write to file
-
+        // fork detection process
         ProcessBuilder ps2 = new ProcessBuilder(cmd, path + "detection.py", targetType);
         ps2.redirectErrorStream(true);
         Process pr2 = null;

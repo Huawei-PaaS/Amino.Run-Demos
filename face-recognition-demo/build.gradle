@@ -53,7 +53,12 @@ task runks(type: JavaExec) {
 task runapp(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = "application.DemoAppStart"
-    args project.property('omsIp'), project.property('omsPort'), project.property('kernelIpAndroid'),
-            project.property('kernelServerPort'), project.property('inferenceType'), project.property('sourceType'),
-            project.property('targetType')
+    args project.property('kernelServerIpFlag'), project.property('kernelServerIp'),
+            project.property('kernelServerPortFlag'), project.property('appKernelServerPort'),
+            project.property('omsIpFlag'), project.property('omsIp'),
+            project.property('omsPortFlag'), project.property('omsPort'),
+            project.property('inferenceTypeFlag'), project.property('inferenceType'),
+            project.property('sourceTypeFlag'), project.property('sourceType'),
+            project.property('targetTypeFlag'), project.property('targetType'),
+            project.property('startWithKernelServerFlag'), project.property('startAppWithKernelServer')
 }
