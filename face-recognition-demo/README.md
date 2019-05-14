@@ -38,7 +38,7 @@ OpenCV and OpenCVContrib Versions - 3.4+
 ```
 **Note:** 
 - OpenCV and OpenCVContrib versions should be the same. Tested with python version 3.5.2 and openCV version 3.4.2 .
-- The python path needs to be changed according to environment setup.
+- The python path needs to be changed as per the environment setup.
 
 #### Environment Setup (Host System)
 Information on setting up OpenCV and Python bindings on Ubuntu can be found 
@@ -48,13 +48,13 @@ Information on setting up OpenCV and Python bindings on Ubuntu can be found
 use appropriate cmake flags to enable multicore/GPU optimizations to improve performance if you need them.
 
 - Make sure to use OpenCV version 3.4.2 and OpenCVContrib version 3.4.2 in installation.
-- Run kernel server and Application in OpenCV virtual environment. Use ```workon <virtual_environment_name>``` command to
+- Run kernel server and application in OpenCV virtual environment. Use ```workon <virtual_environment_name>``` command to
   enable OpenCV virtual environment.
 
 #### Environment Setup (Containerized Environment)
 
 A `Dockerfile` has been provided to build a Docker image with all the dependencies (OpenCV, face_recognition, dlib, and
-jdk1.8.0_181) for this project to run. You may customize this file to suite your needs.
+jdk1.8.0_181) for this project to run. You may customize this file to suit your needs.
 
 To build the Docker image, clone this repo and type at the project root:
 ```bash

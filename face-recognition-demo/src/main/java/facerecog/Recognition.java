@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 /**
- * Class fork new python process for facial recognition with pre-trained model in provided frame
+ * This class forks new python process for facial recognition with pre-trained model in provided frame
  * and returns a list of bounding boxes and identified face labels data.
  *
  */
@@ -21,7 +21,7 @@ public class Recognition implements MicroService {
     public Recognition() {}
 
     /**
-     * Identify faces in frame and return bounding boxes and identified face labels data.
+     * Identify faces in frame and return bounding boxes and identified face label data.
      * @param frame
      * @return
      * @throws IOException

@@ -20,9 +20,9 @@ import java.util.Collections;
 import java.util.logging.Logger;
 
 /**
- * Class orchestrate face recognition app. It fork two python child process
+ * This class orchestrates face recognition app. It forks two python child processes:
  *  1. FrameGenerator : It reads frames from source. Source can be video or camera
- *  2. Tracking: It detects frames supplied by FrameGenerator with human faces and call Recognition microservice for detecting them in frames.
+ *  2. Tracking: It detects frames supplied by {@link FrameGenerator} with human faces and calls recognition micro service for detecting them in frames.
  *
  */
 public class DemoAppStart {
@@ -94,7 +94,7 @@ public class DemoAppStart {
             }
 
             try {
-                // Deploy Recognition micro service in Amino system and fork Tracking process to detect frames with faces on it
+                // Deploy Recognition micro service in Amino system and fork Tracking process to detect frames with faces in it
                 // and eventually use Recognition micro service to identify human face in frames.
                 MicroServiceSpec spec = MicroServiceSpec.newBuilder()
                         .setLang(Language.java)

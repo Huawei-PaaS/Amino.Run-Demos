@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 /**
- * Class fork python process to identify frames with faces. It further calls {@link Recognition} microservice
+ * This class forks a python process to identify frames with faces. It further calls {@link Recognition} micro service
  * to identify faces in frame.
  */
 public class Tracking  {

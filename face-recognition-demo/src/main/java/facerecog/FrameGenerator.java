@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Class fork frame_generator.py python process and provides interface for retrieving frames
+ * This class forks frame_generator.py python process and provides interface for retrieving frames
  * from specified source (video or camera).
  */
 public class FrameGenerator {

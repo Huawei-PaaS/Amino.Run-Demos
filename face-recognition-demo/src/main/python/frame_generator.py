@@ -6,7 +6,7 @@ import os
 
 def extractFrames(sourceType):
     if sourceType == "video":
-        pathIn = os.getcwd() + '/src/main/resources/sample_video.webm'
+        pathIn = os.getcwd() + '/src/main/resources/sample_video.mp4'
         cap = cv2.VideoCapture(pathIn)
     else:
         cap = cv2.VideoCapture(0)

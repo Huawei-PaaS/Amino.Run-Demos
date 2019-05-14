@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 /**
- * Class test face detection locally by forking "detection.py" process.
+ * This class does face detection locally by forking "detection.py" process.
  */
 public class Detection {
     private OutputStream out2;
