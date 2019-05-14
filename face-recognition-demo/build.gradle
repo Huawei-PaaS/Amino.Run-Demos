@@ -60,5 +60,5 @@ task runapp(type: JavaExec) {
             project.property('inferenceTypeFlag'), project.property('inferenceType'),
             project.property('sourceTypeFlag'), project.property('sourceType'),
             project.property('targetTypeFlag'), project.property('targetType'),
-            project.property('startWithKernelServerFlag'), project.property('startAppWithKernelServer')
+            project.property('startKernelServerFlag'), project.property('startKernelServer')
 }

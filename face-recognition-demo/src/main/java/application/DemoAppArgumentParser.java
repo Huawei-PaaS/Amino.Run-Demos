@@ -31,10 +31,10 @@ public class DemoAppArgumentParser extends KernelServerArgumentParser {
     public String targetType;
 
     @Option(
-            name = "start-app-with-kernelserver",
+            name = "start-kernelserver",
             help = "Start App with kernel server. true and false are valid values",
             defaultValue = "false",
             category = "startup",
             converter = BooleanConverter.class)
-    public Boolean startWithKernelServer;
+    public Boolean startKernelServer;
 }

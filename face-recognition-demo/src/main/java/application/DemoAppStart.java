@@ -14,7 +14,6 @@ import amino.run.kernel.server.KernelServerImpl;
 import amino.run.app.Language;
 import amino.run.app.Registry;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.rmi.registry.LocateRegistry;
 import java.util.Collections;
@@ -29,7 +28,7 @@ import java.util.logging.Logger;
 public class DemoAppStart {
     private static final Logger logger = Logger.getLogger(DemoAppStart.class.getName());
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         String frame;
         java.rmi.registry.Registry registry;
 
@@ -38,10 +37,10 @@ public class DemoAppStart {
             // parse command line arguments for app
             parser.parse(args);
         } catch (Exception e) {
-            System.out.println(e.getMessage()+System.lineSeparator()+System.lineSeparator()+
+            System.out.println(e.getMessage() + System.lineSeparator() + System.lineSeparator() +
                     "Usage: "
-                    + DemoAppStart.class.getSimpleName()+System.lineSeparator()
-                    +  parser.describeOptions(
+                    + DemoAppStart.class.getSimpleName() + System.lineSeparator()
+                    + parser.describeOptions(
                     Collections.<String, String>emptyMap(),
                     OptionsParser.HelpVerbosity.LONG));
             return;
@@ -52,18 +51,35 @@ public class DemoAppStart {
         // deploy frame generator
         String sourceType = appArgs.sourceType; // "camera": for onboard camera, "video": for video file
         FrameGenerator frameGenerator = null;
-        if ( sourceType.equalsIgnoreCase("camera") || sourceType.equalsIgnoreCase("video") ) {
+        if (sourceType.equalsIgnoreCase("camera") || sourceType.equalsIgnoreCase("video")) {
             frameGenerator = new FrameGenerator(sourceType);
         } else {
             logger.severe("Incorrect source specified, use either \"camera\" or \"video\"");
             return;
         }
 
-        try {
-            // refer to gradle.properties file for the sequence of arguments
+        if (appArgs.inferenceType.equalsIgnoreCase("detection")) { // run face detection locally
+            /* detection runs locally */
+            Detection detect = new Detection(appArgs.targetType);
+
+            int i = 0;
+            while ((frame = frameGenerator.getFrame()) != null) {
+                /* ignore first few frames to allow for camera warm up */
+                if (i < 3) {
+                    i++;
+                    continue;
+                }
+                detect.processFrame(frame);
+            }
+            return;
+        }
+
+        if (appArgs.inferenceType.equalsIgnoreCase("tracking")) {
+            MicroServiceID mid = null;
+
             registry = LocateRegistry.getRegistry(appArgs.omsIP, appArgs.omsPort);
             Registry server = (Registry) registry.lookup("io.amino.run.oms");
-            if (appArgs.startWithKernelServer) { // start kernel server with app
+            if (appArgs.startKernelServer) { // start kernel server with app
                 KernelServerImpl.main(new String[]{
                         "--kernel-server-ip", appArgs.kernelServerIP,
                         "--kernel-server-port", appArgs.kernelServerPort.toString(),
@@ -77,35 +93,20 @@ public class DemoAppStart {
                         new InetSocketAddress(appArgs.omsIP, appArgs.omsPort));
             }
 
-            if (appArgs.inferenceType.equalsIgnoreCase("detection")) { // run face detection locally
-                /* detection runs locally */
-                Detection detect = new Detection(appArgs.targetType);
-
-                int i = 0;
-                while ((frame = frameGenerator.getFrame()) != null) {
-                    /* ignore first few frames to allow for camera warm up */
-                    if (i < 3) {
-                        i++;
-                        continue;
-                    }
-                    detect.processFrame(frame);
-                }
-            }
-            else if (appArgs.inferenceType.equalsIgnoreCase("tracking")) {
+            try {
                 // Deploy Recognition micro service in Amino system and fork Tracking process to detect frames with faces on it
                 // and eventually use Recognition micro service to identify human face in frames.
-
                 MicroServiceSpec spec = MicroServiceSpec.newBuilder()
                         .setLang(Language.java)
                         .setJavaClassName("facerecog.Recognition").addDMSpec(
                                 DMSpec.newBuilder()
-                                .setName(AtLeastOnceRPCPolicy.class.getName())
-                                .create())
+                                        .setName(AtLeastOnceRPCPolicy.class.getName())
+                                        .create())
                         .create();
 
-                MicroServiceID mid = server.create(spec.toString());
+                mid = server.create(spec.toString());
                 /* recog is a remote object that has handles to the iostream of recognition.py running on server */
-                Recognition recog = (Recognition)server.acquireStub(mid);
+                Recognition recog = (Recognition) server.acquireStub(mid);
                 Tracking track = new Tracking(recog, appArgs.targetType);
 
                 int i = 0;
@@ -117,15 +118,18 @@ public class DemoAppStart {
                     }
                     track.processFrame(frame);
                 }
-                server.delete(mid);
             }
-            else {
-                logger.severe("Incorrect input: please input oms_ip, oms_port, kernel_android_ip, " +
-                        "kernel_server_port, detection/tracking, camera/video, display/file");
+            catch(Exception e){
+                e.printStackTrace();
+            } finally {
+                if (mid != null) {
+                    server.delete(mid);
+                }
             }
+            return;
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+
+    logger.severe("Incorrect input: please input correct inference type (detection/tracking)");
+
     }
 }

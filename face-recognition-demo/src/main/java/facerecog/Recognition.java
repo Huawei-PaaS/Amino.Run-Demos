@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+/**
+ * Class fork new python process for facial recognition with pre-trained model in provided frame
+ * and returns a list of bounding boxes and identified face labels data.
+ *
+ */
 // TODO: Explicitly specify where to run this task based on some logic.
 public class Recognition implements MicroService {
     transient OutputStream out3;
@@ -15,6 +20,13 @@ public class Recognition implements MicroService {
 
     public Recognition() {}
 
+    /**
+     * Identify faces in frame and return bounding boxes and identified face labels data.
+     * @param frame
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public String processFrame(String frame) throws IOException, InterruptedException {
         if (ps == null) {
             initRecognitionProcess();
@@ -27,13 +39,15 @@ public class Recognition implements MicroService {
         return bbox_list_str;
     }
 
+    // init python process for facial recognition
     private void initRecognitionProcess() {
         String cwd = System.getProperty("user.dir");
         String home = System.getProperty("user.home");
-        String cmd = home + "/.virtualenvs/cv/bin/python3";
-        //String cmd = "/usr/local/bin/python";
+        String cmd = home + "/.virtualenvs/cv/bin/python3"; // if deployed on host system with opencv installed
+        //String cmd = "/usr/local/bin/python"; // if deployed in container
         String path = cwd + "/src/main/python/";
 
+        // fork process for facial recognition
         ps = new ProcessBuilder(cmd, path + "recognition.py");
         ps.redirectErrorStream(true);
         Process pr3 = null;

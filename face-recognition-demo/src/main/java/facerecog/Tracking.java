@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+/**
+ * Class fork python process to identify frames with faces. It further calls {@link Recognition} microservice
+ * to identify faces in frame.
+ */
 public class Tracking  {
     private OutputStream out2;
     private BufferedReader in2;
@@ -16,12 +20,11 @@ public class Tracking  {
         /* targetType =  "display": for screen, "file": write to file */
         String cwd = System.getProperty("user.dir");
         String home = System.getProperty("user.home");
-        String cmd = home + "/.virtualenvs/cv/bin/python3";
-        //String cmd = "/usr/local/bin/python";
+        String cmd = home + "/.virtualenvs/cv/bin/python3"; // if deployed on host system with opencv installed
+        //String cmd = "/usr/local/bin/python"; // if deployed in container
         String path = cwd + "/src/main/python/";
 
         // String outputType = "display"; // "display": for screen, "file": write to file
-
         ProcessBuilder ps2 = new ProcessBuilder(cmd, path + "tracking.py", targetType);
         ps2.redirectErrorStream(true);
         Process pr2 = null;

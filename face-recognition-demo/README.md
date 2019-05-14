@@ -36,18 +36,25 @@ or displayed in a window as a live stream.
 Python Version - 3.5+
 OpenCV and OpenCVContrib Versions - 3.4+
 ```
-**Note:** OpenCV and OpenCVContrib versions should be the same. Tested with python version 3.5.2 and openCV version 3.4.2 .
+**Note:** 
+- OpenCV and OpenCVContrib versions should be the same. Tested with python version 3.5.2 and openCV version 3.4.2 .
+- The python path needs to be changed according to environment setup.
 
-A `Dockerfile` has been provided to build a Docker image with all the dependencies (OpenCV, face_recognition, dlib, and
-jdk1.8.0_181) for this project to run. You may customize this file to suite your needs.
-
-More information on setting up OpenCV and Python bindings on Ubuntu can be found 
+#### Environment Setup (Host System)
+Information on setting up OpenCV and Python bindings on Ubuntu can be found 
 [here](https://www.pyimagesearch.com/2016/10/24/ubuntu-16-04-how-to-install-opencv/). Information to setup 
 `face_recognition`, `dlib` and some related helper modules used in this demo can be found
 [here](https://www.pyimagesearch.com/2018/06/18/face-recognition-with-opencv-python-and-deep-learning/). Make sure to 
 use appropriate cmake flags to enable multicore/GPU optimizations to improve performance if you need them.
 
-The python path needs to be changed accordingly before running the app.
+- Make sure to use OpenCV version 3.4.2 and OpenCVContrib version 3.4.2 in installation.
+- Run kernel server and Application in OpenCV virtual environment. Use ```workon <virtual_environment_name>``` command to
+  enable OpenCV virtual environment.
+
+#### Environment Setup (Containerized Environment)
+
+A `Dockerfile` has been provided to build a Docker image with all the dependencies (OpenCV, face_recognition, dlib, and
+jdk1.8.0_181) for this project to run. You may customize this file to suite your needs.
 
 To build the Docker image, clone this repo and type at the project root:
 ```bash
@@ -68,6 +75,10 @@ Note that this use of flags is necessary in order to use a camera on your host s
 video in a window on the host system's X server (tested on Ubuntu). This would be required only for the container 
 running the DemoApp.
 
+You can find the ip of the container by typing the following inside the container:
+```bash
+$ awk 'END{print $1}' /etc/hosts
+```
 ## Usage
 
 This Java project uses Gradle wrapper to automate the build and run. Each container is self-contained and has the project
@@ -76,30 +87,25 @@ parameters specified in the `gradle.properties` file in that folder to talk to o
  parameters specified in the corresponding `gradle.properties` file are identical for all the containers. You need to 
  specify the ip and port for OMS and KernelServer.
 
-You can find the ip of the container by typing the following inside the container:
-```bash
-$ awk 'END{print $1}' /etc/hosts
-```
-
 You can also specify the `sourceType` for the input stream of frames to be a video file or a camera, and `targetType` to 
 be a file or a windowed display for the stream of processed frames. The type of processing desired, detection or 
 tracking, is specified via `inferenceType`.
 
 Finally, build the project in each container as:
 ```bash
-$ ./gradlew build
+$ bash gradlew build
 ```
 followed by
 ```bash
-$ ./gradlew runoms
+$ bash gradlew runoms
 ```
 in the OMS container;
 ```bash
-$ ./gradlew runks
+$ bash gradlew runks
 ```
 in the KernelServer container; and
 ```bash
-$ ./gradlew runapp
+$ bash gradlew runapp
 ```
 in the DemoApp container.
 
