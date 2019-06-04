@@ -1,0 +1,56 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: oms-deployment-${appname}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oms-${appname}
+  template:
+    metadata:
+      labels:
+        app: oms-${appname}
+    spec:
+      containers:
+      - name: oms
+        image: ${image}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: ${svcport} # omsport # 32555
+        - containerPort: ${rmiport} # rmiport # 32557
+        command: ["/root/amino/start-oms.sh"]
+        args: ["${svcport}", "${rmiport}"]
+        env:
+          - name: MY_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oms-rmi-svc-${appname}
+spec:
+  type: NodePort
+  ports:
+    - port: ${rmiport}
+      targetPort: ${rmiport}
+      nodePort: ${rmiport}
+      protocol: TCP
+  selector:
+    app: oms-${appname}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oms-svc-${appname}
+spec:
+  type: NodePort
+  ports:
+    - port: ${svcport}
+      targetPort: ${svcport}
+      nodePort: ${svcport}
+      protocol: TCP
+  selector:
+    app: oms-${appname}

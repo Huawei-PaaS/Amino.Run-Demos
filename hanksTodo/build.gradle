@@ -49,5 +49,44 @@ subprojects {
         args src, pkgName, dst
         outputs.dir dst
     }
+
+    dockerfile {
+        copyFile './build/libs/hanksTodo.jar', '/root/amino/jars/'
+    }
+
+    buildDockerImage {
+        tag =  "$docker.registryCredentials.username/hankstodo:latest"
+    }
+
+    pushImage {
+        imageName = "$docker.registryCredentials.username/hankstodo"
+        tag = 'latest'
+    }
+
+    createOMSDeployment {
+        expand(image: "$docker.registryCredentials.username/hankstodo:latest",
+                svcport: project.property('omssvcport'),
+                rmiport: project.property('omsrmiport'),
+                appname: project.property('appname'))
+    }
+
+    createKernelServerDeployment {
+        expand(image: "$docker.registryCredentials.username/hankstodo:latest",
+                omssvcport: project.property('omssvcport'),
+                svcport: project.property('kernelserversvcport'),
+                rmiport: project.property('kernelserverrmiport'),
+                svcport2: project.property('kernelserver2svcport'),
+                rmiport2: project.property('kernelserver2rmiport'),
+                appname: project.property('appname'))
+    }
+
+
+    fatJar {
+        manifest {
+            attributes 'Implementation-Title': 'HanksToDo fat jar',
+                    'Implementation-Version': '1.0',
+                    'Main-Class': 'amino.run.appexamples.hankstodo.device.TodoActivity'
+        }
+    }
 }
 

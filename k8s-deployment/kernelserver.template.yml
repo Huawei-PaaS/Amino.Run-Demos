@@ -1,0 +1,113 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kernelserver-deployment-${appname}-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kernelserver-${appname}-1
+  template:
+    metadata:
+      labels:
+        app: kernelserver-${appname}-1
+    spec:
+      containers:
+      - name: kernelserver
+        image: ${image}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: ${svcport} # omsport # 32558
+        - containerPort: ${rmiport} # rmiport # 32556
+        command: ["/root/amino/start-kernelserver.sh"]
+        args: ["oms-svc-${appname}", "${omssvcport}", "${rmiport}", "${svcport}"]
+        env:
+          - name: MY_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kernelserver-deployment-${appname}-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kernelserver-${appname}-2
+  template:
+    metadata:
+      labels:
+        app: kernelserver-${appname}-2
+    spec:
+      containers:
+        - name: kernelserver
+          image: ${image}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: ${svcport2} # omsport # 32558
+            - containerPort: ${rmiport2} # rmiport # 32556
+          command: ["/root/amino/start-kernelserver.sh"]
+          args: ["oms-svc-${appname}", "${omssvcport}", "${rmiport2}", "${svcport2}"]
+          env:
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ks-rmi-svc-${appname}-1
+spec:
+  type: NodePort
+  ports:
+    - port: ${rmiport}
+      targetPort: ${rmiport}
+      nodePort: ${rmiport}
+      protocol: TCP
+  selector:
+    app: kernelserver-${appname}-1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ks-svc-${appname}-1
+spec:
+  type: NodePort
+  ports:
+    - port: ${svcport}
+      targetPort: ${svcport}
+      nodePort: ${svcport}
+      protocol: TCP
+  selector:
+    app: kernelserver-${appname}-1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ks-rmi-svc-${appname}-2
+spec:
+  type: NodePort
+  ports:
+    - port: ${rmiport2}
+      targetPort: ${rmiport2}
+      nodePort: ${rmiport2}
+      protocol: TCP
+  selector:
+    app: kernelserver-${appname}-2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ks-svc-${appname}-2
+spec:
+  type: NodePort
+  ports:
+    - port: ${svcport2}
+      targetPort: ${svcport2}
+      nodePort: ${svcport2}
+      protocol: TCP
+  selector:
+    app: kernelserver-${appname}-2
