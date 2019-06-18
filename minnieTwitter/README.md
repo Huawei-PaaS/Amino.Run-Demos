@@ -44,11 +44,6 @@ Alternatively,
     EOF
 ```
 
-### Generate keystores for signing Android apps
-```
-$ cd Amino.Run-Demos/minnieTwitter/
-$ keytool -genkey -v -keystore release.keystore -storepass xxxxxx -alias xxxxxx -keypass xxxxxx -keyalg RSA -keysize 2048 -validity 10000
-```
 ### Building the App
 ```
 $ cd Amino.Run-Demos/
