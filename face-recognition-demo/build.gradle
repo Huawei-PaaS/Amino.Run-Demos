@@ -1,4 +1,16 @@
-apply plugin: 'java-library'
+buildscript {
+    dependencies {
+        classpath 'com.bmuschko:gradle-docker-plugin:3.0.7'
+    }
+}
+
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+
+plugins {
+    id "de.qaware.cloud.deployer" version "0.9.2"
+}
 
 repositories {
     jcenter()
@@ -6,8 +18,136 @@ repositories {
     maven { url  "https://dl.bintray.com/terryzhuo/Amino" }
 }
 
+apply plugin: 'java-library'
+apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
+apply plugin: "de.qaware.cloud.deployer"
+
 dependencies {
     implementation 'com.amino-os.run:amino-run-core:1.0.0.RC6'
+}
+
+docker {
+    registryCredentials {
+        url = project.property('url')
+        username = project.property('repo.username')
+        password = project.property('repo.password')
+    }
+}
+
+task fatJar(type: Jar) {
+    dependsOn jar
+    baseName = project.name
+    manifest {
+        attributes 'Implementation-Title': 'Face-Recognition-Demo fat jar',
+                'Implementation-Version': '1.0',
+                'Main-Class': 'face-recognition-demo.src.main.java.application.DemoAppStart'
+    }
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    with jar
+}
+build.finalizedBy(fatJar)
+
+task copyScripts(type: Copy){
+    mkdir "$projectDir/scripts/"
+    from "${projectDir}/../k8s-deployment/common/"
+    into "$projectDir/scripts/"
+}
+
+task dockerfile(type: Dockerfile) {
+    dependsOn copyScripts
+    dependsOn fatJar
+    destFile = project.file('./Dockerfile')
+    instructionsFromTemplate "Dockerfile.template"
+    copyFile './scripts/*', '/root/amino/'
+    copyFile './build/libs/face-recognition-demo.jar', '/root/amino/jars/'
+    copyFile './src/main/python/*' , '/root/src/main/python/'
+    copyFile './src/main/resources/*', '/root/src/main/resources/'
+    workingDir '/root/'
+}
+
+task buildDockerImage(type: DockerBuildImage) {
+    dependsOn dockerfile
+    url = 'unix:///var/run/docker.sock'
+    inputDir = file("$projectDir")
+    tag =  "$docker.registryCredentials.username/face-recognition-demo:latest"
+}
+
+task pushImage(type: DockerPushImage) {
+    dependsOn buildDockerImage
+    imageName = "$docker.registryCredentials.username/face-recognition-demo"
+    tag = 'latest'
+}
+
+task createOMSDeployment (type: Copy) {
+    from "${projectDir}/../k8s-deployment/"
+    into "$projectDir"
+    include 'oms.template.yml'
+    rename { file -> 'oms.yml' }
+    expand(image: "$docker.registryCredentials.username/face-recognition-demo:latest",
+            svcport: project.property('omssvcport'),
+            rmiport: project.property('omsrmiport'),
+            appname: project.property('appname'))
+}
+
+task createKernelServerDeployment (type: Copy) {
+    from "${projectDir}/../k8s-deployment/"
+    into "$projectDir"
+    include 'kernelserver.template.yml'
+    rename { file -> 'kernelserver.yml' }
+    expand(image: "$docker.registryCredentials.username/face-recognition-demo:latest",
+            omssvcport: project.property('omssvcport'),
+            svcport: project.property('kernelserversvcport'),
+            rmiport: project.property('kernelserverrmiport'),
+            svcport2: project.property('kernelserver2svcport'),
+            rmiport2: project.property('kernelserver2rmiport'),
+            appname: project.property('appname'))
+}
+
+deployer {
+    kubernetes {
+        id = project.property('omsId')
+        baseUrl = project.property('baseUrl')
+        namespace = project.property('namespace')
+        strategy = project.property('strategy')
+        auth {
+            username = project.property('k8s.username')
+            password = project.property('k8s.password')
+        }
+        ssl {
+            trustAll = true
+        }
+        files = [file("oms.yml")]
+    }
+}
+
+deployer {
+    kubernetes {
+        id = project.property('kernelServerId')
+        baseUrl = project.property('baseUrl')
+        namespace = project.property('namespace')
+        strategy = project.property('strategy')
+        auth {
+            username = project.property('k8s.username')
+            password = project.property('k8s.password')
+        }
+        ssl {
+            trustAll = true
+        }
+        files = [file("kernelserver.yml")]
+    }
+}
+
+task deployOms(type: Exec){
+    dependsOn pushImage
+    dependsOn createOMSDeployment
+    commandLine "${projectDir}/../gradlew", 'deploy', "--environmentId=oms"
+}
+
+task deployKernelServer(type: Exec){
+    dependsOn deployOms
+    dependsOn createKernelServerDeployment
+    commandLine "${projectDir}/../gradlew", 'deploy', "--environmentId=kernelserver"
 }
 
 // Task for Stub generation

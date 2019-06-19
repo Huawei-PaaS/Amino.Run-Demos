@@ -1,6 +1,6 @@
 #!/bin/sh -xe
 
-source /root/amino/common.inc
+. /root/amino/common.inc
 
 get_node_ip
 KERNELSERVER_IP=$node_ip

@@ -1,6 +1,6 @@
 #!/bin/sh -xe
 
-source /root/amino/common.inc
+. /root/amino/common.inc
 
 # TODO: getopt / usage
 OMS_PORT=$1

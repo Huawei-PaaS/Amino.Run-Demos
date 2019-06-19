@@ -17,8 +17,11 @@ public class Recognition implements MicroService {
     transient OutputStream out3;
     transient BufferedReader in3;
     transient ProcessBuilder ps;
+    boolean containerEnv;
 
-    public Recognition() {}
+    public Recognition(Boolean containerEnv) {
+        this.containerEnv = containerEnv;
+    }
 
     /**
      * Identify faces in frame and return bounding boxes and identified face label data.
@@ -44,7 +47,9 @@ public class Recognition implements MicroService {
         String cwd = System.getProperty("user.dir");
         String home = System.getProperty("user.home");
         String cmd = home + "/.virtualenvs/cv/bin/python3"; // if deployed on host system with opencv installed
-        //String cmd = "/usr/local/bin/python"; // if deployed in container
+        if (containerEnv) {
+            cmd = "/usr/local/bin/python"; // if deployed in container
+        }
         String path = cwd + "/src/main/python/";
 
         // fork process for facial recognition

@@ -37,4 +37,12 @@ public class DemoAppArgumentParser extends KernelServerArgumentParser {
             category = "startup",
             converter = BooleanConverter.class)
     public Boolean startKernelServer;
+
+    @Option(
+            name = "container-environment",
+            help = "Set if application is running in container environment",
+            defaultValue = "false",
+            category = "startup",
+            converter = BooleanConverter.class)
+    public Boolean containerEnvironment;
 }
