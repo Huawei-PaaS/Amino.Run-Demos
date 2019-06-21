@@ -27,6 +27,8 @@ import java.util.logging.Logger;
  */
 public class DemoAppStart {
     private static final Logger logger = Logger.getLogger(DemoAppStart.class.getName());
+    // flag to ensure, application environment (VM based/ container based)
+    public static boolean containerEnvironment;
 
     public static void main(String[] args) throws Exception {
         String frame;
@@ -47,6 +49,9 @@ public class DemoAppStart {
         }
 
         DemoAppArgumentParser appArgs = parser.getOptions(DemoAppArgumentParser.class);
+
+        // set container environment flag
+        containerEnvironment = appArgs.containerEnvironment;
 
         // deploy frame generator
         String sourceType = appArgs.sourceType; // "camera": for onboard camera, "video": for video file
@@ -104,7 +109,7 @@ public class DemoAppStart {
                                         .create())
                         .create();
 
-                mid = server.create(spec.toString());
+                mid = server.create(spec.toString(), containerEnvironment);
                 /* recog is a remote object that has handles to the iostream of recognition.py running on server */
                 Recognition recog = (Recognition) server.acquireStub(mid);
                 Tracking track = new Tracking(recog, appArgs.targetType);

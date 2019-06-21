@@ -1,3 +1,4 @@
+FROM python:3.6-slim-stretch
 # To access the camera and X server of the host system (Ubuntu), run the image built from this dockerfile as:
 # >> xhost +
 # >> docker run -it -e DISPLAY=$DISPLAY -e NO_AT_BRIDGE=1 -e JAVA_HOME=/root/jdk1.8.0_181 \
@@ -6,9 +7,7 @@
 #
 # Upon completion, do the following:
 # >> xhost -
-
-FROM python:3.6-slim-stretch
-
+LABEL "maintainer"="huawei@huawei.com"
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
@@ -31,8 +30,8 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     wget \
     zip \
-    git
-
+    git \
+    dnsutils
 RUN cd ~ && \
     wget -O opencv.zip https://github.com/opencv/opencv/archive/3.4.2.zip && \
     wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/3.4.2.zip && \
@@ -61,7 +60,6 @@ RUN cd ~ && \
     rm opencv.zip opencv_contrib.zip && \
     rm -rf opencv-3.4.2 && \
     rm -rf opencv_contrib-3.4.2	
-
 RUN git clone https://github.com/davisking/dlib.git && \
     cd dlib && \
     mkdir build && \
@@ -69,20 +67,15 @@ RUN git clone https://github.com/davisking/dlib.git && \
     cmake .. -DUSE_AVX_INSTRUCTIONS=1 && \
     cmake --build . && \
     cd .. && \
-    python setup.py install --yes USE_AVX_INSTRUCTIONS && \
+    python setup.py install && \
     pip install face_recognition && \
     pip install imutils && \
     pip install imageio
-
-# NOTE: Oracle regularly change the versions available for download - so update the below appropriately.
-#       See https://github.com/dockerfile/java/issues/36
-RUN \
-    JAVA_VERSION_MAJOR=8 \
-    JAVA_VERSION_MINOR=191 \
-    JAVA_VERSION_BUILD=12 \
-    JAVA_DOWNLOAD_HASH=2787e4a523244c269598db4e85c51e0c && \
-    cd ~ && \
-    wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_DOWNLOAD_HASH}/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz && \
-    tar -xzf jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz
-
-COPY ./ /home/face-recognition-demo/
+# NOTE: GraalVM regularly change the versions available for download - so update the below appropriately.
+RUN cd ~ && \
+   wget https://github.com/oracle/graal/releases/download/vm-1.0.0-rc8/graalvm-ce-1.0.0-rc8-linux-amd64.tar.gz && \
+   tar -xzf graalvm-ce-1.0.0-rc8-linux-amd64.tar.gz && \
+   mv graalvm-ce-1.0.0-rc8 java && \
+   rm graalvm-ce-1.0.0-rc8-linux-amd64.tar.gz
+ENV JAVA_HOME=/root/java
+ENV PATH=/root/java/bin:$PATH

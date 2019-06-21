@@ -1,5 +1,7 @@
 package facerecog;
 
+import application.DemoAppStart;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,7 +23,9 @@ public class Tracking  {
         String cwd = System.getProperty("user.dir");
         String home = System.getProperty("user.home");
         String cmd = home + "/.virtualenvs/cv/bin/python3"; // if deployed on host system with opencv installed
-        //String cmd = "/usr/local/bin/python"; // if deployed in container
+        if (DemoAppStart.containerEnvironment) {
+            cmd = "/usr/local/bin/python"; // if deployed in container
+        }
         String path = cwd + "/src/main/python/";
 
         // String outputType = "display"; // "display": for screen, "file": write to file

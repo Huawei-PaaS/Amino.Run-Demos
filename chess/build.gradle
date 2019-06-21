@@ -52,13 +52,60 @@ subprojects {
         outputs.dir dst
     }
 
-    genStubs {
+    task compileGenEngineStubs(type: JavaCompile) {
         dependsOn genEngineStubs
+        source = genEngineStubs.outputs
+        classpath = sourceSets.main.compileClasspath
+        destinationDir = sourceSets.main.output.classesDir
+        options.incremental = true
+        outputs.dir destinationDir
+    }
+
+    genStubs {
+        dependsOn compileGenEngineStubs
         def pkgName = 'chessmanager'
         def src = "$projectDir.parent/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/chessmanager/"
         def dst = "$projectDir.parent/src/main/java/chessmanager/stubs/"
         args src, pkgName, dst
         outputs.dir dst
+    }
+
+    dockerfile {
+        copyFile './build/libs/chess.jar', '/root/amino/jars/'
+    }
+
+    buildDockerImage {
+        tag =  "$docker.registryCredentials.username/chess:latest"
+    }
+
+    pushImage {
+        imageName = "$docker.registryCredentials.username/chess"
+        tag = 'latest'
+    }
+
+    createOMSDeployment {
+        expand(image: "$docker.registryCredentials.username/chess:latest",
+                svcport: project.property('omssvcport'),
+                rmiport: project.property('omsrmiport'),
+                appname: project.property('appname'))
+    }
+
+    createKernelServerDeployment {
+        expand(image: "$docker.registryCredentials.username/chess:latest",
+                omssvcport: project.property('omssvcport'),
+                svcport: project.property('kernelserversvcport'),
+                rmiport: project.property('kernelserverrmiport'),
+                svcport2: project.property('kernelserver2svcport'),
+                rmiport2: project.property('kernelserver2rmiport'),
+                appname: project.property('appname'))
+    }
+
+    fatJar {
+        manifest {
+            attributes 'Implementation-Title': 'Chess fat jar',
+                    'Implementation-Version': '1.0',
+                    'Main-Class': 'kobi.chess.MainActivity'
+        }
     }
 }
 
