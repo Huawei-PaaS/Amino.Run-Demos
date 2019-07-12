@@ -52,13 +52,58 @@ subprojects {
         outputs.dir dst
     }
 
-    genStubs {
+    task compileGenEngineStubs(type: JavaCompile) {
         dependsOn genEngineStubs
+        source = genEngineStubs.outputs
+        classpath = sourceSets.main.compileClasspath
+        destinationDir = sourceSets.main.output.classesDir
+        options.incremental = true
+        outputs.dir destinationDir
+    }
+
+    genStubs {
+        dependsOn compileGenEngineStubs
         def pkgName = 'chessmanager'
         def src = "$projectDir.parent/build/intermediates/javac/debug/compileDebugJavaWithJavac/classes/chessmanager/"
         def dst = "$projectDir.parent/src/main/java/chessmanager/stubs/"
         args src, pkgName, dst
         outputs.dir dst
+    }
+
+    dockerfile {
+        copyFile './build/libs/chess.jar', '/root/amino/jars/'
+    }
+
+    buildDockerImage {
+        tag =  "$docker.registryCredentials.username/chess:latest"
+    }
+
+    pushImage {
+        imageName = "$docker.registryCredentials.username/chess"
+        tag = 'latest'
+    }
+
+    def omsRmiPort = Integer.parseInt(project.property('omsrmiport'))
+
+    deployOms << {
+        def omsSvcPort = Integer.parseInt(project.property('omssvcport'))
+        createOMSDeployment(project.property('appname'), omsRmiPort, omsSvcPort)
+        createService(project.property('omssvcname'), omsRmiPort, omsSvcPort, project.property('omsselector'))
+    }
+
+    deployKernelServer << {
+        def ksRmiPort = Integer.parseInt(project.property('kernelserverrmiport')) + Integer.parseInt(ksNum)
+        def ksSvcPort = Integer.parseInt(project.property('kernelserversvcport')) + Integer.parseInt(ksNum)
+        createKernelServerDeployment(project.property('ksNum'), project.property('appname'), omsRmiPort, ksSvcPort, ksRmiPort)
+        createService(project.property('kernelserversvcname') + "-${ksNum}", ksRmiPort, ksSvcPort, project.property('kernelserverselector')+ "-${ksNum}")
+    }
+
+    fatJar {
+        manifest {
+            attributes 'Implementation-Title': 'Chess fat jar',
+                    'Implementation-Version': '1.0',
+                    'Main-Class': 'kobi.chess.MainActivity'
+        }
     }
 }
 

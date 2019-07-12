@@ -49,5 +49,41 @@ subprojects {
         args src, pkgName, dst
         outputs.dir dst
     }
+
+    dockerfile {
+        copyFile './build/libs/hanksTodo.jar', '/root/amino/jars/'
+    }
+
+    buildDockerImage {
+        tag =  "$docker.registryCredentials.username/hankstodo:latest"
+    }
+
+    pushImage {
+        imageName = "$docker.registryCredentials.username/hankstodo"
+        tag = 'latest'
+    }
+
+    def omsRmiPort = Integer.parseInt(project.property('omsrmiport'))
+
+    deployOms << {
+        def omsSvcPort = Integer.parseInt(project.property('omssvcport'))
+        createOMSDeployment(project.property('appname'), omsRmiPort, omsSvcPort)
+        createService(project.property('omssvcname'), omsRmiPort, omsSvcPort, project.property('omsselector'))
+    }
+
+    deployKernelServer << {
+        def ksRmiPort = Integer.parseInt(project.property('kernelserverrmiport')) + Integer.parseInt(ksNum)
+        def ksSvcPort = Integer.parseInt(project.property('kernelserversvcport')) + Integer.parseInt(ksNum)
+        createKernelServerDeployment(project.property('ksNum'), project.property('appname'), omsRmiPort, ksSvcPort, ksRmiPort)
+        createService(project.property('kernelserversvcname') + "-${ksNum}", ksRmiPort, ksSvcPort, project.property('kernelserverselector')+ "-${ksNum}")
+    }
+
+    fatJar {
+        manifest {
+            attributes 'Implementation-Title': 'HanksToDo fat jar',
+                    'Implementation-Version': '1.0',
+                    'Main-Class': 'amino.run.appexamples.hankstodo.device.TodoActivity'
+        }
+    }
 }
 
